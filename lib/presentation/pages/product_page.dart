@@ -9,7 +9,7 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Page')),
+      appBar: AppBar(title: const Text('Home')),
       body: BlocProvider(
         create: (context) => ProductBloc(getProducts: context.read()),
         child: BlocBuilder<ProductBloc, ProductState>(
