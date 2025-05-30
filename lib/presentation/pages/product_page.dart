@@ -24,6 +24,9 @@ class ProductPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final product = state.products[index];
                 return ListTile(
+                  onTap: () {
+                    // Handle product tap
+                  },
                   leading: Image.network(product.thumbnail),
                   title: Text(product.title),
                   subtitle: Text('\$${product.price}'),
