@@ -13,7 +13,7 @@ class ProductModel extends Product {
   });
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'] as String,
+      id: json['id'],
       title: json['title'] as String,
       description: json['description'] as String,
       thumbnail: json['thumbnail'] as String,

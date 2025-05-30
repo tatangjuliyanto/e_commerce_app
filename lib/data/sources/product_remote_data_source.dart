@@ -3,11 +3,16 @@ import 'dart:convert';
 import 'package:e_commerce_app/data/models/product_model.dart';
 import 'package:http/http.dart' as http;
 
-class ProductRemoteDataSource {
+abstract class ProductRemoteDataSource {
+  Future<List<ProductModel>> getProducts();
+}
+
+class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final http.Client client;
 
-  ProductRemoteDataSource({required this.client});
+  ProductRemoteDataSourceImpl(this.client);
 
+  @override
   Future<List<ProductModel>> getProducts() async {
     final response = await client.get(
       Uri.parse('https://dummyjson.com/products'),
