@@ -18,11 +18,8 @@ class LoginPage extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthenticatedState) {
             context.go('/products');
-          } else if (state is AuthLoadingState) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Logging in...')));
           } else if (state is AuthErrorState) {
+            // Show error message
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
