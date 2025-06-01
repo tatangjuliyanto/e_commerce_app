@@ -1,6 +1,6 @@
 import 'package:e_commerce_app/injection_container.dart' as di;
-import 'package:e_commerce_app/presentation/bloc/product_bloc.dart';
-import 'package:e_commerce_app/presentation/pages/product_page.dart';
+import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
+import 'package:e_commerce_app/features/product/presentation/pages/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

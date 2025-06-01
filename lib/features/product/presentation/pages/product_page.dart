@@ -1,6 +1,6 @@
-import 'package:e_commerce_app/presentation/bloc/product_bloc.dart';
-import 'package:e_commerce_app/presentation/bloc/product_event.dart';
-import 'package:e_commerce_app/presentation/bloc/product_state.dart';
+import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
+import 'package:e_commerce_app/features/product/presentation/bloc/product_event.dart';
+import 'package:e_commerce_app/features/product/presentation/bloc/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

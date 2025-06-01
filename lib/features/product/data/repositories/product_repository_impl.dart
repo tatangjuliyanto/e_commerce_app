@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/data/sources/product_remote_data_source.dart';
+import 'package:e_commerce_app/features/product/data/sources/product_remote_data_source.dart';
 
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';

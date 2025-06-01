@@ -1,7 +1,7 @@
 // import 'package:bloc/bloc.dart';
-import 'package:e_commerce_app/domain/usecases/get_products.dart';
-import 'package:e_commerce_app/presentation/bloc/product_event.dart';
-import 'package:e_commerce_app/presentation/bloc/product_state.dart';
+import 'package:e_commerce_app/features/product/domain/usecases/get_products.dart';
+import 'package:e_commerce_app/features/product/presentation/bloc/product_event.dart';
+import 'package:e_commerce_app/features/product/presentation/bloc/product_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {

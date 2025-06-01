@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:e_commerce_app/data/models/product_model.dart';
+import 'package:e_commerce_app/features/product/data/models/product_model.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ProductRemoteDataSource {
