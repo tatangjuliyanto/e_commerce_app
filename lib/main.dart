@@ -1,10 +1,6 @@
 import 'package:e_commerce_app/core/config/app_router.dart';
-import 'package:e_commerce_app/features/product/domain/entities/product.dart';
-import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
-import 'package:e_commerce_app/features/product/presentation/pages/product_page.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,18 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'E-Commerce App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // routerConfig: di.sl<AppRouter>().router,
-      // home: BlocProvider(
-      //   create: (_) => di.sl<ProductBloc>(),
-      //   child: ProductPage(),
-      // ),
-      initialRoute: '/product',
+      routerConfig: di.sl<AppRouter>().router,
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.d
 import 'package:e_commerce_app/features/product/presentation/bloc/product_event.dart';
 import 'package:e_commerce_app/features/product/presentation/pages/product_page.dart';
 import 'package:e_commerce_app/injection_container.dart';
-import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
