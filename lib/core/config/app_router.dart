@@ -16,9 +16,7 @@ class AppRouter {
 
   late final GoRouter router = GoRouter(
     initialLocation: '/login',
-    refreshListenable: GoRouterRefreshStream(
-      authBloc.stream, // ⬅️ ini adalah constructor
-    ),
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
     redirect: (context, state) {
       final authState = authBloc.state;
       final isLoggedIn = authState is AuthenticatedState;
