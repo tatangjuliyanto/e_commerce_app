@@ -401,13 +401,6 @@ class _LoginPageState extends State<LoginPage>
                                     // Handle Google login
                                   },
                                 ),
-                                _buildSocialButton(
-                                  icon: Icons.facebook,
-                                  label: 'Facebook',
-                                  onPressed: () {
-                                    // Handle Facebook login
-                                  },
-                                ),
                               ],
                             ),
                           ],
@@ -429,7 +422,7 @@ class _LoginPageState extends State<LoginPage>
     required String label,
     required VoidCallback onPressed,
   }) {
-    return Container(
+    return SizedBox(
       width: 140,
       height: 50,
       child: ElevatedButton.icon(
@@ -438,7 +431,7 @@ class _LoginPageState extends State<LoginPage>
         label: Text(label),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
-          foregroundColor: Colors.grey.shade700,
+          foregroundColor: Colors.grey.shade900,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
