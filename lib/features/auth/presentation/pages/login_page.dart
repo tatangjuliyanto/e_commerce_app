@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/navigation/app_coordinator.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
@@ -17,12 +18,10 @@ class LoginPage extends StatelessWidget {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            context.go('/products');
-          } else if (state is AuthErrorState) {
-            // Show error message
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            AppCoordinator.navigateToProducts(context);
+          }
+          if (state is AuthErrorState) {
+            AppCoordinator.showError(context, state.message);
           }
         },
         child: Padding(
@@ -56,12 +55,6 @@ class LoginPage extends StatelessWidget {
                   context.go('/register');
                 },
                 child: const Text('Don\'t have an account? Register'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.go('/product');
-                },
-                child: const Text('Products Page'),
               ),
             ],
           ),

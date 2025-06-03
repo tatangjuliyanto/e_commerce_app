@@ -1,5 +1,5 @@
+import 'package:e_commerce_app/core/navigation/app_coordinator.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:e_commerce_app/features/auth/presentation/pages/login_page.dart';
 import 'package:e_commerce_app/features/auth/presentation/pages/register_page.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
@@ -17,21 +17,9 @@ class AppRouter {
   late final GoRouter router = GoRouter(
     initialLocation: '/login',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
-    redirect: (context, state) {
-      final authState = authBloc.state;
-      final isLoggedIn = authState is AuthenticatedState;
-      final isGoingToLogin =
-          state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register';
-
-      if (!isLoggedIn && !isGoingToLogin) {
-        return '/login';
-      }
-      if (isLoggedIn && isGoingToLogin) {
-        return '/products';
-      }
-      return null;
-    },
+    redirect:
+        (context, state) =>
+            AppCoordinator.handelRedirect(context, state, authBloc.state),
     routes: [
       GoRoute(
         path: '/login',
@@ -48,7 +36,7 @@ class AppRouter {
             ),
       ),
       GoRoute(
-        path: '/product',
+        path: '/products',
         builder:
             (context, state) => BlocProvider(
               create: (_) => di.sl<ProductBloc>()..add(LoadProducts()),

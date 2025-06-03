@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/core/config/app_router.dart';
+import 'package:e_commerce_app/core/navigation/app_router.dart';
 import 'package:e_commerce_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:e_commerce_app/features/auth/data/sources/auth_remote_data_source.dart';
 import 'package:e_commerce_app/features/auth/domain/repositories/auth_repository.dart';
@@ -33,8 +33,7 @@ Future<void> init() async {
   //-----------------------------------------------------------------
 
   // Auth Bloc
-  sl.registerFactory(() => AuthBloc(loginUser: sl(), registerUser: sl()));
-
+  sl.registerLazySingleton(() => AuthBloc(loginUser: sl(), registerUser: sl()));
   // Use cases
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
