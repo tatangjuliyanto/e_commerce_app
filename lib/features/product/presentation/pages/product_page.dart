@@ -1,7 +1,9 @@
 import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_event.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_state.dart';
-import 'package:e_commerce_app/features/product/presentation/widgets/card_product.dart';
+import 'package:e_commerce_app/features/product/presentation/widgets/product/card_product.dart';
+import 'package:e_commerce_app/features/product/presentation/widgets/product/empty_product.dart';
+import 'package:e_commerce_app/features/product/presentation/widgets/product/error_product.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,30 +33,48 @@ class ProductPage extends StatelessWidget {
             ),
           ],
         ),
-        body: BlocConsumer<ProductBloc, ProductState>(
-          listener: (context, state) {
-            if (state is ProductError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  action: SnackBarAction(
-                    label: 'Retry',
-                    onPressed: () {
-                      context.read<ProductBloc>().add(LoadProducts());
-                    },
-                  ),
-                ),
-              );
-            }
-          },
-          builder: (context, state) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<ProductBloc>().add(LoadProducts());
-              },
-              child: cardProduct(context, state),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            context.read<ProductBloc>().add(LoadProducts());
+            await context.read<ProductBloc>().stream.firstWhere(
+              (state) => state is! ProductLoading,
             );
           },
+          child: BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoading) {
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Loading products...'),
+                    ],
+                  ),
+                );
+              } else if (state is ProductLoaded) {
+                if (state.products.isEmpty) {
+                  return const EmptyProduct();
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: state.products.length,
+                  itemBuilder: (context, index) {
+                    return CardProduct(product: state.products[index]);
+                  },
+                );
+              } else if (state is ProductError) {
+                return ErrorProduct(
+                  message: state.message,
+                  onRetry: () {
+                    context.read<ProductBloc>().add(LoadProducts());
+                  },
+                );
+              }
+              return const Center(child: Text('Something went wrong'));
+            },
+          ),
         ),
       ),
     );

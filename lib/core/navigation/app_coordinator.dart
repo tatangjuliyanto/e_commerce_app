@@ -25,6 +25,10 @@ class AppCoordinator {
     context.go('/products');
   }
 
+  static void navigateToProductDetails(BuildContext context, String ProductId) {
+    context.go('/products/$ProductId');
+  }
+
   static void navigateToRegister(BuildContext context) {
     context.go('/register');
   }
