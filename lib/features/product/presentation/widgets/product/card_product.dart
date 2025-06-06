@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/navigation/app_coordinator.dart';
 import 'package:e_commerce_app/features/product/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,14 @@ class CardProduct extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: ListTile(
         contentPadding: const EdgeInsets.all(12),
-        onTap: () {
-          // Navigate to product detail
-          // context.go('/products/${product.id}');
+        onTap: () async {
+          debugPrint('Card tapped for product: ${product.title}');
+          debugPrint('Product ID: ${product.id}');
+          // AppCoordinator.nav;
+          AppCoordinator.navigateToProductDetails(
+            context,
+            product.id.toString(),
+          );
         },
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),

@@ -25,8 +25,34 @@ class AppCoordinator {
     context.go('/products');
   }
 
-  static void navigateToProductDetails(BuildContext context, String ProductId) {
-    context.go('/products/$ProductId');
+  static void navigateToProductDetails(BuildContext context, String productId) {
+    debugPrint(
+      'AppCoordinator: Navigating to product details for ID: $productId',
+    );
+
+    // Validate productId before navigation
+    if (productId.isEmpty) {
+      debugPrint('Error: Empty product ID');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid product ID'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    try {
+      context.go('/products/$productId');
+    } catch (e) {
+      debugPrint('Navigation error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Navigation failed: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   static void navigateToRegister(BuildContext context) {
@@ -34,8 +60,12 @@ class AppCoordinator {
   }
 
   static void showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }

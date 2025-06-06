@@ -11,9 +11,9 @@ class ProductLoaded extends ProductState {
   ProductLoaded({required this.products});
 }
 
-class ProductId extends ProductState {
-  final Product products;
-  ProductId({required this.products});
+class ProductDetailLoaded extends ProductState {
+  final Product product;
+  ProductDetailLoaded({required this.product});
 }
 
 class ProductError extends ProductState {

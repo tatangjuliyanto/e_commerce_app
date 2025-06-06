@@ -8,6 +8,7 @@ import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/product/data/repositories/product_repository_impl.dart';
 import 'package:e_commerce_app/features/product/data/sources/product_remote_data_source.dart';
 import 'package:e_commerce_app/features/product/domain/repositories/product_repository.dart';
+import 'package:e_commerce_app/features/product/domain/usecases/get_product_detail.dart';
 import 'package:e_commerce_app/features/product/domain/usecases/get_products.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,10 +55,16 @@ Future<void> init() async {
   //-----------------------------------------------------------------
 
   // Product Bloc
-  sl.registerFactory(() => ProductBloc(getProducts: sl()));
+  sl.registerFactory(
+    () => ProductBloc(
+      getProducts: sl<GetProducts>(),
+      getProductDetail: sl<GetProductDetail>(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetProducts(sl()));
+  sl.registerLazySingleton(() => GetProductDetail(sl()));
 
   // Repository
   sl.registerLazySingleton<ProductRepository>(
