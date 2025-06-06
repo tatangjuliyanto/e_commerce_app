@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts();
   Future<ProductModel> getProductsDetail(String productId);
-
-  // getProductsDetail(String productId) {}
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -42,19 +40,4 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       throw Exception('Failed to Load Products');
     }
   }
-
-  // @override
-  // getProductsDetail(String productId) async {
-  //   final response = await client.get(
-  //     Uri.parse('https://dummyjson.com/products/$productId'),
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     final data = json.decode(response.body);
-  //     debugPrint('Product Detail: ${data.toString()}');
-  //     return ProductModel.fromJson(data);
-  //   } else {
-  //     throw Exception('Failed to Load Product Detail');
-  //   }
-  // }
 }
