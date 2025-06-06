@@ -1,5 +1,4 @@
 import 'package:e_commerce_app/features/product/data/sources/product_remote_data_source.dart';
-
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
 
@@ -17,9 +16,4 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<Product> getProductDetail(String productId) async {
     return await remoteDataSource.getProductsDetail(productId);
   }
-
-  // getProductDetail(String productId) {
-
-  //   throw UnimplementedError();
-  // }
 }

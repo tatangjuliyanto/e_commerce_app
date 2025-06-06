@@ -26,13 +26,7 @@ class AppCoordinator {
   }
 
   static void navigateToProductDetails(BuildContext context, String productId) {
-    debugPrint(
-      'AppCoordinator: Navigating to product details for ID: $productId',
-    );
-
-    // Validate productId before navigation
     if (productId.isEmpty) {
-      debugPrint('Error: Empty product ID');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Invalid product ID'),
@@ -45,7 +39,6 @@ class AppCoordinator {
     try {
       context.go('/products/$productId');
     } catch (e) {
-      debugPrint('Navigation error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Navigation failed: $e'),

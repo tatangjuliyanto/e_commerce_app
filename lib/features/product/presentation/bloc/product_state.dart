@@ -20,3 +20,8 @@ class ProductError extends ProductState {
   final String message;
   ProductError({required this.message});
 }
+
+class ProductCartSuccess extends ProductState {
+  final String message;
+  ProductCartSuccess({required this.message});
+}

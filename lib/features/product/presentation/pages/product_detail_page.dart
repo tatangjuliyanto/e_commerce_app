@@ -35,19 +35,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             AppCoordinator.navigateToProducts(context);
-          }, // Use GoRouter's pop method
+          },
         ),
       ),
       body: BlocListener<ProductBloc, ProductState>(
         listener: (context, state) {
-          // if (state is ProductCartSuccess) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(
-          //       content: Text(state.message),
-          //       backgroundColor: Colors.green,
-          //     ),
-          //   );
-          // }
+          if (state is ProductCartSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
         },
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
@@ -112,7 +112,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ),
           const SizedBox(height: 16),
-          // Product title
           Text(
             product.title,
             style: Theme.of(
@@ -120,7 +119,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          // Price and rating
           Row(
             children: [
               Text(
@@ -143,7 +141,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ],
           ),
           const SizedBox(height: 16),
-          // Description
           Text(
             'Description',
             style: Theme.of(
@@ -158,7 +155,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
           ),
           const SizedBox(height: 24),
-          // Add to cart button
           Center(
             child: ElevatedButton.icon(
               onPressed: () {

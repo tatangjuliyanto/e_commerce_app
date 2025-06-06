@@ -49,7 +49,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       // TODO: Implement proper add to cart logic
       // For now, show success message
       // emit(ProductCartSuccess(message: 'Product added to cart successfully'));
-
       // Return to previous state after showing success
       // You might want to maintain the current product detail state
       if (state is ProductDetailLoaded) {

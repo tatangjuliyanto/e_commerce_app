@@ -14,7 +14,6 @@ class CardProduct extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(12),
         onTap: () async {
-          // Navigate to product details page
           AppCoordinator.navigateToProductDetails(
             context,
             product.id.toString(),
