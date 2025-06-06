@@ -14,9 +14,12 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  getProductDetail(String productId) {
-    // TODO: implement getProductDetail
-
-    throw UnimplementedError();
+  Future<Product> getProductDetail(String productId) async {
+    return await remoteDataSource.getProductsDetail(productId);
   }
+
+  // getProductDetail(String productId) {
+
+  //   throw UnimplementedError();
+  // }
 }

@@ -5,7 +5,6 @@ import 'package:e_commerce_app/features/product/presentation/bloc/product_event.
 import 'package:e_commerce_app/features/product/presentation/bloc/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -20,7 +19,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    // Dispatch LoadProductDetail event after the frame is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<ProductBloc>().add(LoadProductDetail(widget.productId));

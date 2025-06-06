@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:e_commerce_app/features/product/data/models/product_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts();
+
+  getProductsDetail(String productId) {}
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -24,6 +27,21 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       return products.map((json) => ProductModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to Load Products');
+    }
+  }
+
+  @override
+  getProductsDetail(String productId) async {
+    final response = await client.get(
+      Uri.parse('https://dummyjson.com/products/$productId'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      debugPrint('Product Detail: ${data.toString()}');
+      return ProductModel.fromJson(data);
+    } else {
+      throw Exception('Failed to Load Product Detail');
     }
   }
 }
