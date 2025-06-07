@@ -10,34 +10,48 @@ abstract class ProductRemoteDataSource {
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final http.Client client;
 
+  static const _baseUrl = 'https://dummyjson.com/products';
+  static const _timeoutDuration = Duration(seconds: 5);
+
   ProductRemoteDataSourceImpl(this.client);
 
   @override
   Future<List<ProductModel>> getProducts() async {
-    final response = await client.get(
-      Uri.parse('https://dummyjson.com/products'),
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final List products = data['products'];
-      return products.map((json) => ProductModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to Load Products');
+    try {
+      final response = await client
+          .get(Uri.parse(_baseUrl))
+          .timeout(_timeoutDuration);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List products = data['products'];
+        return products.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to Load Products: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to Load Products: $e');
     }
   }
 
   @override
   Future<ProductModel> getProductsDetail(String productId) async {
-    final response = await client.get(
-      Uri.parse('https://dummyjson.com/products/$productId'),
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return ProductModel.fromJson(data);
-    } else {
-      throw Exception('Failed to Load Products');
+    if (productId.isEmpty) {
+      throw Exception('Product ID cannot be empty');
+    }
+    try {
+      final response = await client
+          .get(Uri.parse('$_baseUrl/$productId'))
+          .timeout(_timeoutDuration);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return ProductModel.fromJson(data);
+      } else {
+        throw Exception(
+          'Failed to Load Product Detail: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Failed to Load Product Detail: $e');
     }
   }
 }
