@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts();
   Future<ProductModel> getProductsDetail(String productId);
+  // Future<String> addToCart(ProductModel product);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
