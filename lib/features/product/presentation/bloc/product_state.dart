@@ -1,7 +1,11 @@
 import 'package:e_commerce_app/features/product/domain/entities/product.dart';
-import 'package:equatable/equatable.dart';
 
-abstract class ProductState {}
+abstract class ProductState {
+  //TODO The code dont fixit
+  final List<Product> cart;
+  ProductState({this.cart = const []});
+  List<Object> get props => [cart];
+}
 
 class ProductInitial extends ProductState {}
 
@@ -23,7 +27,7 @@ class ProductError extends ProductState {
 }
 
 class CartUpdated extends ProductState {
-  CartUpdated(super.cart);
+  CartUpdated({super.cart});
 
   @override
   List<Object> get props => [cart];
