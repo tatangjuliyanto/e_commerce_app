@@ -4,8 +4,8 @@ import 'package:e_commerce_app/features/auth/presentation/pages/login_page.dart'
 import 'package:e_commerce_app/features/auth/presentation/pages/register_page.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_event.dart';
-import 'package:e_commerce_app/features/product/presentation/pages/product_detail_page.dart';
-import 'package:e_commerce_app/features/product/presentation/pages/product_page.dart';
+import 'package:e_commerce_app/features/product/presentation/pages/product/product_detail_page.dart';
+import 'package:e_commerce_app/features/product/presentation/pages/product/product_page.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:flutter/foundation.dart';
