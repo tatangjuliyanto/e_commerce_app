@@ -26,6 +26,7 @@ class ProductError extends ProductState {
   ProductError({required this.message});
 }
 
+//TODO: The code will be fixit
 class CartUpdated extends ProductState {
   CartUpdated({super.cart});
 
