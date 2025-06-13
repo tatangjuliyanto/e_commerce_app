@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/features/product/domain/entities/product.dart';
 
 abstract class ProductState {
-  //TODO The code dont fixit
+  //TODO The code will be fixit
   final List<Product> cart;
   ProductState({this.cart = const []});
   List<Object> get props => [cart];
