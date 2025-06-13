@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage>
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthenticatedState) {
-                AppCoordinator.navigateToProducts(context);
+                AppCoordinator.navigateToHome(context);
               }
               if (state is AuthErrorState) {
                 AppCoordinator.showError(context, state.message);

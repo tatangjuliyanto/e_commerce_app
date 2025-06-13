@@ -4,6 +4,8 @@ import 'package:e_commerce_app/features/auth/presentation/pages/login_page.dart'
 import 'package:e_commerce_app/features/auth/presentation/pages/register_page.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/features/product/presentation/bloc/product_event.dart';
+import 'package:e_commerce_app/features/product/presentation/pages/cart/cart_page.dart';
+import 'package:e_commerce_app/features/home/pages/home_page.dart';
 import 'package:e_commerce_app/features/product/presentation/pages/product/product_detail_page.dart';
 import 'package:e_commerce_app/features/product/presentation/pages/product/product_page.dart';
 import 'package:e_commerce_app/injection_container.dart';
@@ -11,6 +13,7 @@ import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/product/presentation/pages/search/search_page.dart';
 
 class AppRouter {
   final AuthBloc authBloc = sl<AuthBloc>();
@@ -22,6 +25,9 @@ class AppRouter {
         (context, state) =>
             AppCoordinator.handelRedirect(context, state, authBloc.state),
     routes: [
+      //--------------------------------------------------
+      // Authentication Routes
+      //--------------------------------------------------
       GoRoute(
         path: '/login',
         builder:
@@ -36,12 +42,16 @@ class AppRouter {
               child: RegisterPage(),
             ),
       ),
+
+      //--------------------------------------------------
+      // Product Routes
+      //--------------------------------------------------
       GoRoute(
-        path: '/products',
+        path: '/home',
         builder:
             (context, state) => BlocProvider(
               create: (_) => di.sl<ProductBloc>()..add(LoadProducts()),
-              child: ProductPage(),
+              child: HomePage(),
             ),
       ),
       GoRoute(
@@ -53,6 +63,22 @@ class AppRouter {
             child: ProductDetailPage(productId: productId),
           );
         },
+      ),
+      GoRoute(
+        path: '/cart',
+        builder:
+            (context, state) => BlocProvider(
+              create: (_) => sl<ProductBloc>(),
+              child: const CartPage(),
+            ),
+      ),
+      GoRoute(
+        path: '/search',
+        builder:
+            (context, state) => BlocProvider(
+              create: (_) => di.sl<ProductBloc>(),
+              child: SearchPage(),
+            ),
       ),
     ],
   );

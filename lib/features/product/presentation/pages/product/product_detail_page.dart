@@ -34,7 +34,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            AppCoordinator.navigateToProducts(context);
+            AppCoordinator.navigateToHome(context);
           },
         ),
       ),

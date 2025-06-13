@@ -16,40 +16,13 @@ class AppCoordinator {
       return '/login';
     }
     if (isLoggedIn && isGoingToLogin) {
-      return '/products';
+      return '/home';
     }
     return null;
   }
 
-  static void navigateToProducts(BuildContext context) {
-    context.go('/products');
-  }
-
-  static void navigateToProductDetails(BuildContext context, String productId) {
-    if (productId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid product ID'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    try {
-      context.go('/products/$productId');
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Navigation failed: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  static void navigateToRegister(BuildContext context) {
-    context.go('/register');
+  static void navigateToHome(BuildContext context) {
+    context.go('/home');
   }
 
   static void showError(BuildContext context, String message) {

@@ -7,6 +7,7 @@ import 'package:e_commerce_app/features/product/presentation/widgets/product/err
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
@@ -22,13 +23,13 @@ class ProductPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                // Navigate to search
+                context.go('/search');
               },
             ),
             IconButton(
               icon: const Icon(Icons.shopping_cart),
               onPressed: () {
-                // Navigate to cart
+                context.go('/cart');
               },
             ),
           ],

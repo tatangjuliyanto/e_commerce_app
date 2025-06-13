@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/core/navigation/app_coordinator.dart';
 import 'package:e_commerce_app/features/product/domain/entities/product.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CardProduct extends StatelessWidget {
   const CardProduct({super.key, required this.product});
@@ -14,10 +15,7 @@ class CardProduct extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(12),
         onTap: () async {
-          AppCoordinator.navigateToProductDetails(
-            context,
-            product.id.toString(),
-          );
+          context.go('/products/${product.id}');
         },
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
