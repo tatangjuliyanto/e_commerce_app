@@ -7,7 +7,6 @@ import 'package:e_commerce_app/features/product/presentation/bloc/product_event.
 import 'package:e_commerce_app/features/product/presentation/pages/cart/cart_page.dart';
 import 'package:e_commerce_app/features/home/pages/home_page.dart';
 import 'package:e_commerce_app/features/product/presentation/pages/product/product_detail_page.dart';
-import 'package:e_commerce_app/features/product/presentation/pages/product/product_page.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:flutter/foundation.dart';
