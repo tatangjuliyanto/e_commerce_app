@@ -158,9 +158,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Center(
             child: ElevatedButton.icon(
               onPressed: () {
-                context.read<ProductBloc>().add(
-                  AddToCartEvent(product.id as String),
-                );
+                //TODO: Implement add to cart functionality
               },
               icon: const Icon(Icons.add_shopping_cart),
               label: const Text('Add to Cart'),

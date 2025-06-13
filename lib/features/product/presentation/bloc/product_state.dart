@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/features/product/domain/entities/product.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class ProductState {}
 
@@ -19,6 +20,13 @@ class ProductDetailLoaded extends ProductState {
 class ProductError extends ProductState {
   final String message;
   ProductError({required this.message});
+}
+
+class CartUpdated extends ProductState {
+  CartUpdated(super.cart);
+
+  @override
+  List<Object> get props => [cart];
 }
 
 class ProductCartSuccess extends ProductState {
