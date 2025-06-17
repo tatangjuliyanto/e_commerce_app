@@ -9,7 +9,8 @@ import 'package:e_commerce_app/features/home/presentation/pages/home_page.dart';
 import 'package:e_commerce_app/features/products/presentation/pages/product/product_detail_page.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
-import 'package:flutter/foundation.dart';
+import 'package:e_commerce_app/shared/presentation/pages/onboarding_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../features/products/presentation/pages/search/search_page.dart';
@@ -18,12 +19,22 @@ class AppRouter {
   final AuthBloc authBloc = sl<AuthBloc>();
 
   late final GoRouter router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/onboarding',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
+
     redirect:
         (context, state) =>
             AppCoordinator.handelRedirect(context, state, authBloc.state),
     routes: [
+      //--------------------------------------------------
+      // Onboarding Route
+      //--------------------------------------------------
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) {
+          return Scaffold(body: OnboardingPage());
+        },
+      ),
       //--------------------------------------------------
       // Authentication Routes
       //--------------------------------------------------

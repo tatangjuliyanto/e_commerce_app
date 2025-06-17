@@ -18,3 +18,19 @@ class AuthRegisterEvent extends AuthEvent {
 class AuthLogoutEvent extends AuthEvent {
   AuthLogoutEvent();
 }
+
+class ForgotPasswordEvent extends AuthEvent {
+  final String email;
+
+  ForgotPasswordEvent(this.email);
+  @override
+  String toString() => 'ForgotPasswordEvent: $email';
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ForgotPasswordEvent && other.email == email;
+  }
+
+  @override
+  int get hashCode => email.hashCode;
+}

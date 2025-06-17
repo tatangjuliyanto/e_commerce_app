@@ -13,6 +13,9 @@ class AppCoordinator {
         state.matchedLocation == '/login' ||
         state.matchedLocation == '/register';
     if (!isLoggedIn && !isGoingToLogin) {
+      return '/onboarding';
+    }
+    if (!isLoggedIn && !isGoingToLogin) {
       return '/login';
     }
     if (isLoggedIn && isGoingToLogin) {

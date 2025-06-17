@@ -10,28 +10,48 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc({required this.loginUser, required this.registerUser})
     : super(AuthInitialState()) {
-    on<AuthLoginEvent>((event, emit) async {
-      emit(AuthLoadingState());
-      try {
-        final user = await loginUser(event.email, event.password);
-        emit(AuthenticatedState(user));
-      } catch (e) {
-        emit(AuthErrorState(e.toString()));
-      }
-    });
+    on<AuthLoginEvent>(_onAuthLoginEvent);
+    on<AuthRegisterEvent>(_onAuthRegisterEvent);
+    on<ForgotPasswordEvent>(_onForgotPasswordEvent);
+  }
+  Future<void> _onAuthLoginEvent(
+    AuthLoginEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoadingState());
+    try {
+      final user = await loginUser(event.email, event.password);
+      emit(AuthenticatedState(user));
+    } catch (e) {
+      emit(AuthErrorState(e.toString()));
+    }
+  }
 
-    on<AuthRegisterEvent>((event, emit) async {
-      emit(AuthLoadingState());
-      try {
-        final user = await registerUser(
-          event.name,
-          event.email,
-          event.password,
-        );
-        emit(AuthenticatedState(user));
-      } catch (e) {
-        emit(AuthErrorState(e.toString()));
-      }
-    });
+  Future<void> _onAuthRegisterEvent(
+    AuthRegisterEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoadingState());
+    try {
+      final user = await registerUser(event.name, event.email, event.password);
+      emit(AuthenticatedState(user));
+    } catch (e) {
+      emit(AuthErrorState(e.toString()));
+    }
+  }
+
+  //TODO : Implement forgot password functionality
+  Future<void> _onForgotPasswordEvent(
+    ForgotPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoadingState());
+    try {
+      // Assuming you have a use case for forgot password
+      // await forgotPassword(event.email);
+      emit(ForgotPasswordState(event.email));
+    } catch (e) {
+      emit(AuthErrorState(e.toString()));
+    }
   }
 }
