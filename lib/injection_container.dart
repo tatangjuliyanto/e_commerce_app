@@ -11,6 +11,7 @@ import 'package:e_commerce_app/features/products/domain/repositories/product_rep
 import 'package:e_commerce_app/features/products/domain/usecases/get_product_detail.dart';
 import 'package:e_commerce_app/features/products/domain/usecases/get_products.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
+import 'package:e_commerce_app/shared/presentation/bloc/onboarding_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
@@ -28,6 +29,12 @@ Future<void> init() async {
   // External
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => http.Client());
+
+  //-----------------------------------------------------------------
+  //                   Onboarding
+  //-----------------------------------------------------------------
+
+  sl.registerLazySingleton(() => OnboardingBloc());
 
   //-----------------------------------------------------------------
   //                    Features - Auth

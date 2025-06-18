@@ -374,7 +374,7 @@ class _RegisterPageState extends State<RegisterPage>
                                             TextSpan(
                                               text: 'Terms of Service',
                                               style: TextStyle(
-                                                color: Colors.teal,
+                                                color: Colors.purple.shade500,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 decoration:
@@ -391,7 +391,7 @@ class _RegisterPageState extends State<RegisterPage>
                                             TextSpan(
                                               text: 'Privacy Policy',
                                               style: TextStyle(
-                                                color: Colors.teal,
+                                                color: Colors.purple.shade500,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 decoration:

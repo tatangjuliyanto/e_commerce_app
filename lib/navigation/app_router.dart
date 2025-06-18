@@ -9,6 +9,7 @@ import 'package:e_commerce_app/features/home/presentation/pages/home_page.dart';
 import 'package:e_commerce_app/features/products/presentation/pages/product/product_detail_page.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
+import 'package:e_commerce_app/shared/presentation/bloc/onboarding_bloc.dart';
 import 'package:e_commerce_app/shared/presentation/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,9 +32,11 @@ class AppRouter {
       //--------------------------------------------------
       GoRoute(
         path: '/onboarding',
-        builder: (context, state) {
-          return Scaffold(body: OnboardingPage());
-        },
+        builder:
+            (context, state) => BlocProvider(
+              create: (_) => di.sl<OnboardingBloc>(),
+              child: OnboardingPage(),
+            ),
       ),
       //--------------------------------------------------
       // Authentication Routes
