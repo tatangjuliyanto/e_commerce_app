@@ -10,6 +10,7 @@ class AppCoordinator {
   ) {
     final isLoggedIn = authState is AuthenticatedState;
     final isGoingToLogin =
+        state.matchedLocation == '/onboarding' ||
         state.matchedLocation == '/login' ||
         state.matchedLocation == '/register';
     if (!isLoggedIn && !isGoingToLogin) {

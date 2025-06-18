@@ -22,7 +22,6 @@ class AppRouter {
   late final GoRouter router = GoRouter(
     initialLocation: '/onboarding',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
-
     redirect:
         (context, state) =>
             AppCoordinator.handelRedirect(context, state, authBloc.state),
