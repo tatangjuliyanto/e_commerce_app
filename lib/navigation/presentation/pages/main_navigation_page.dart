@@ -8,10 +8,10 @@ class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
 
   @override
-  _HomePagesState createState() => _HomePagesState();
+  _MainNavigationPagesState createState() => _MainNavigationPagesState();
 }
 
-class _HomePagesState extends State<MainNavigationPage> {
+class _MainNavigationPagesState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     ProductPage(),
