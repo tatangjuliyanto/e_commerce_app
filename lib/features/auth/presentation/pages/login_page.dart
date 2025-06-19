@@ -102,7 +102,12 @@ class _LoginPageState extends State<LoginPage>
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withValues(
+                                  red: 0.1,
+                                  green: 0.1,
+                                  blue: 0.1,
+                                  alpha: 0.2,
+                                ),
                                 blurRadius: 20,
                                 offset: const Offset(0, 10),
                               ),
@@ -130,7 +135,7 @@ class _LoginPageState extends State<LoginPage>
                                 color: Colors.white,
                                 shadows: [
                                   Shadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withOpacity(0.6),
                                     offset: const Offset(0, 2),
                                     blurRadius: 4,
                                   ),
@@ -142,7 +147,7 @@ class _LoginPageState extends State<LoginPage>
                               'Sign in to continue shopping',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withOpacity(0.8),
                               ),
                             ),
                           ],
