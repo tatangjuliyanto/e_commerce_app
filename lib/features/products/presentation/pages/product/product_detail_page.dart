@@ -1,10 +1,10 @@
-import 'package:e_commerce_app/navigation/app_coordinator.dart';
 import 'package:e_commerce_app/features/products/domain/entities/product.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_event.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -34,7 +34,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            AppCoordinator.navigateToHome(context);
+            context.go('/home');
           },
         ),
       ),

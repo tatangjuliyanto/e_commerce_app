@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../notification/presentation/pages/notification_page.dart';
-import '../../../products/presentation/pages/product/product_page.dart';
-import '../../../profile/presentation/pages/profile_page.dart';
-import '../../../trending/presentation/pages/trending_page.dart';
+import '../../../features/notification/presentation/pages/notification_page.dart';
+import '../../../features/products/presentation/pages/product/product_page.dart';
+import '../../../features/profile/presentation/pages/profile_page.dart';
+import '../../../features/trending/presentation/pages/trending_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MainNavigationPage extends StatefulWidget {
+  const MainNavigationPage({super.key});
 
   @override
   _HomePagesState createState() => _HomePagesState();
 }
 
-class _HomePagesState extends State<HomePage> {
+class _HomePagesState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     ProductPage(),

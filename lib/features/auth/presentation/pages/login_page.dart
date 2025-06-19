@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/navigation/app_coordinator.dart';
+import 'package:e_commerce_app/app_router.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
@@ -78,10 +78,10 @@ class _LoginPageState extends State<LoginPage>
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthenticatedState) {
-                AppCoordinator.navigateToHome(context);
+                context.go('/home');
               }
               if (state is AuthErrorState) {
-                AppCoordinator.showError(context, state.message);
+                AppRouter.showError(context, state.message);
               }
             },
             builder: (context, state) {

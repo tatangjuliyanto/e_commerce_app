@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/navigation/app_router.dart';
+import 'package:e_commerce_app/app_router.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:flutter/material.dart';

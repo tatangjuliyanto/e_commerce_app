@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/navigation/app_router.dart';
+import 'package:e_commerce_app/app_router.dart';
 import 'package:e_commerce_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:e_commerce_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:e_commerce_app/features/auth/domain/repositories/auth_repository.dart';
