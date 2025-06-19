@@ -1,20 +1,20 @@
-import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
-import 'package:e_commerce_app/features/auth/presentation/pages/login_page.dart';
-import 'package:e_commerce_app/features/auth/presentation/pages/register_page.dart';
-import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
-import 'package:e_commerce_app/features/products/presentation/bloc/product_event.dart';
-import 'package:e_commerce_app/features/products/presentation/pages/cart/cart_page.dart';
-import 'package:e_commerce_app/navigation/presentation/pages/main_navigation_page.dart';
-import 'package:e_commerce_app/features/products/presentation/pages/product/product_detail_page.dart';
-import 'package:e_commerce_app/injection_container.dart';
-import 'package:e_commerce_app/injection_container.dart' as di;
-import 'package:e_commerce_app/shared/presentation/bloc/onboarding_bloc.dart';
-import 'package:e_commerce_app/shared/presentation/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/auth_state.dart';
+import 'features/auth/presentation/pages/login_page.dart';
+import 'features/auth/presentation/pages/register_page.dart';
+import 'features/products/presentation/bloc/product_bloc.dart';
+import 'features/products/presentation/bloc/product_event.dart';
+import 'features/products/presentation/pages/cart/cart_page.dart';
+import 'package:e_commerce_app/injection_container.dart' as di;
+import 'package:e_commerce_app/injection_container.dart';
+import 'features/products/presentation/pages/product/product_detail_page.dart';
 import 'features/products/presentation/pages/search/search_page.dart';
+import 'navigation/presentation/pages/main_navigation_page.dart';
+import 'shared/presentation/bloc/onboarding_bloc.dart';
+import 'shared/presentation/pages/onboarding_page.dart';
 
 class AppRouter {
   final AuthBloc authBloc = sl<AuthBloc>();
