@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/features/auth/domain/usecases/forgot_password_user.dart';
 import 'package:e_commerce_app/features/auth/domain/usecases/login_user.dart';
 import 'package:e_commerce_app/features/auth/domain/usecases/register_user.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
