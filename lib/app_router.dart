@@ -1,3 +1,4 @@
+import 'features/trending/presentation/pages/trending_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -68,9 +69,17 @@ class AppRouter {
               child: RegisterPage(),
             ),
       ),
+      // GoRoute(
+      //   path: '/forgot-password',
+      //   builder:
+      //       (context, state) => BlocProvider.value(
+      //         value: sl<AuthBloc>(),
+      //         child: ForgotPasswordPage(),
+      //       ),
+      // ),
 
       //--------------------------------------------------
-      // Product Routes
+      // ALL Routes In Home Tab
       //--------------------------------------------------
       GoRoute(
         path: '/home',
@@ -91,14 +100,6 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/cart',
-        builder:
-            (context, state) => BlocProvider(
-              create: (_) => sl<ProductBloc>(),
-              child: const CartPage(),
-            ),
-      ),
-      GoRoute(
         path: '/search',
         builder:
             (context, state) => BlocProvider(
@@ -106,6 +107,30 @@ class AppRouter {
               child: SearchPage(),
             ),
       ),
+      GoRoute(
+        path: '/cart',
+        builder:
+            (context, state) => BlocProvider(
+              create: (_) => sl<ProductBloc>(),
+              child: const CartPage(),
+            ),
+      ),
+
+      //--------------------------------------------------
+      // ALL Routes in Trending Tab
+      //--------------------------------------------------
+      GoRoute(
+        path: '/trending',
+        builder:
+            (context, state) => BlocProvider(
+              create: (_) => di.sl<ProductBloc>(),
+              child: TrendingPage(),
+            ),
+      ),
+
+      //--------------------------------------------------
+      // ALL Routes in Notification Tab
+      //--------------------------------------------------
     ],
   );
 
