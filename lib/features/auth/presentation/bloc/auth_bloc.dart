@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/features/auth/domain/usecases/forgot_password_user.dart';
 import 'package:e_commerce_app/features/auth/domain/usecases/login_user.dart';
 import 'package:e_commerce_app/features/auth/domain/usecases/register_user.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
@@ -7,9 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUser loginUser;
   final RegisterUser registerUser;
+  // final ForgotPasswordUser forgotPasswordUser;
 
-  AuthBloc({required this.loginUser, required this.registerUser})
-    : super(AuthInitialState()) {
+  AuthBloc({
+    required this.loginUser,
+    required this.registerUser,
+    // required this.forgotPasswordUser,
+  }) : super(AuthInitialState()) {
     on<AuthLoginEvent>(_onAuthLoginEvent);
     on<AuthRegisterEvent>(_onAuthRegisterEvent);
     on<ForgotPasswordEvent>(_onForgotPasswordEvent);
@@ -47,8 +52,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoadingState());
     try {
-      // Assuming you have a use case for forgot password
-      // await forgotPassword(event.email);
       emit(ForgotPasswordState(event.email));
     } catch (e) {
       emit(AuthErrorState(e.toString()));

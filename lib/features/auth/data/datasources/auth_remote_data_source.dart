@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);
   Future<UserModel> register(String name, String email, String password);
+  Future<UserModel> forgotpassword(String email);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -40,5 +41,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       email: user.email!,
       password: password,
     );
+  }
+
+  @override
+  Future<UserModel> forgotpassword(String email) async {
+    await firebaseAuth.sendPasswordResetEmail(email: email);
+    return UserModel(uid: '', name: '', email: email, password: '');
   }
 }

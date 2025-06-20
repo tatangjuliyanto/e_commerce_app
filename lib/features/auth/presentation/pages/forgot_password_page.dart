@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/app_router.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
@@ -6,19 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
+class _ForgotPasswordPageState extends State<ForgotPasswordPage>
     with SingleTickerProviderStateMixin {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _obscurePassword = true;
   late AnimationController _animationController;
   late Animation<double> _logoAnimation;
   late Animation<Offset> _formAnimation;
@@ -55,7 +52,6 @@ class _LoginPageState extends State<LoginPage>
   void dispose() {
     _animationController.dispose();
     emailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -77,11 +73,15 @@ class _LoginPageState extends State<LoginPage>
         child: SafeArea(
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
-              if (state is AuthenticatedState) {
-                context.go('/home');
-              }
               if (state is AuthErrorState) {
-                AppRouter.showError(context, state.message);
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              } else if (state is SuccessSendEmail) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Password reset link sent!')),
+                );
+                context.go('/login');
               }
             },
             builder: (context, state) {
@@ -102,19 +102,14 @@ class _LoginPageState extends State<LoginPage>
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(
-                                  red: 0.1,
-                                  green: 0.1,
-                                  blue: 0.1,
-                                  alpha: 0.2,
-                                ),
+                                color: Colors.black.withOpacity(0.2),
                                 blurRadius: 20,
                                 offset: const Offset(0, 10),
                               ),
                             ],
                           ),
                           child: const Icon(
-                            Icons.shopping_bag,
+                            Icons.lock_reset,
                             size: 60,
                             color: Colors.deepPurple,
                           ),
@@ -122,13 +117,13 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       const SizedBox(height: 30),
 
-                      // Welcome Text
+                      // Header Text
                       FadeTransition(
                         opacity: _logoAnimation,
                         child: Column(
                           children: [
                             Text(
-                              'Welcome Back!',
+                              'Forgot Password?',
                               style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
@@ -144,7 +139,7 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Sign in to continue shopping',
+                              'Enter your email to reset your password',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white.withOpacity(0.8),
@@ -192,8 +187,22 @@ class _LoginPageState extends State<LoginPage>
                                     fillColor: Colors.grey.shade100,
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Colors.deepPurple,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
                                         width: 2,
                                       ),
                                     ),
@@ -210,73 +219,9 @@ class _LoginPageState extends State<LoginPage>
                                     return null;
                                   },
                                 ),
-                                const SizedBox(height: 16),
-
-                                // Password Field
-                                TextFormField(
-                                  controller: passwordController,
-                                  obscureText: _obscurePassword,
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    prefixIcon: const Icon(Icons.lock_outlined),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _obscurePassword
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscurePassword = !_obscurePassword;
-                                        });
-                                      },
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade100,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                        color: Colors.deepPurple,
-                                        width: 2,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your password';
-                                    }
-                                    if (value.length < 6) {
-                                      return 'Password must be at least 6 characters';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 8),
-
-                                // Forgot Password
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      context.go('/forgot-password');
-                                      debugPrint('$context');
-                                    },
-                                    child: Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                        color: Colors.deepPurple,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 const SizedBox(height: 24),
 
-                                // Login Button
+                                // Submit Button
                                 SizedBox(
                                   width: double.infinity,
                                   height: 56,
@@ -288,9 +233,8 @@ class _LoginPageState extends State<LoginPage>
                                               if (_formKey.currentState!
                                                   .validate()) {
                                                 context.read<AuthBloc>().add(
-                                                  AuthLoginEvent(
+                                                  ForgotPasswordEvent(
                                                     emailController.text.trim(),
-                                                    passwordController.text,
                                                   ),
                                                 );
                                               }
@@ -314,7 +258,7 @@ class _LoginPageState extends State<LoginPage>
                                               ),
                                             )
                                             : const Text(
-                                              'Sign In',
+                                              'Send Reset Link',
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600,
@@ -322,94 +266,24 @@ class _LoginPageState extends State<LoginPage>
                                             ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
+                                const SizedBox(height: 16),
 
-                      // Register Link
-                      FadeTransition(
-                        opacity: _logoAnimation,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Don\'t have an account? ',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 16,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.go('/register');
-                              },
-                              child: const Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Social Login Section
-                      const SizedBox(height: 30),
-                      FadeTransition(
-                        opacity: _logoAnimation,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    color: Colors.white.withOpacity(0.5),
-                                    thickness: 1,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
+                                // Back to Login
+                                TextButton(
+                                  onPressed: () {
+                                    context.go('/login');
+                                  },
                                   child: Text(
-                                    'Or continue with',
+                                    'Back to Sign In',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.9),
-                                      fontSize: 14,
+                                      color: Colors.deepPurple,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Divider(
-                                    color: Colors.white.withOpacity(0.5),
-                                    thickness: 1,
-                                  ),
-                                ),
                               ],
                             ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildSocialButton(
-                                  icon: Icons.g_mobiledata,
-                                  label: 'Google',
-                                  onPressed: () {
-                                    // Handle Google login
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ],
@@ -418,30 +292,6 @@ class _LoginPageState extends State<LoginPage>
               );
             },
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return SizedBox(
-      width: 140,
-      height: 50,
-      child: ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, size: 24),
-        label: Text(label),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.grey.shade900,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 0,
         ),
       ),
     );

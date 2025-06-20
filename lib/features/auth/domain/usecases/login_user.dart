@@ -13,8 +13,4 @@ class LoginUser {
   // Future<User> loginWithGoogle() async {
   //   return await repository.loginWithGoogle();
   // }
-
-  // Future<void> logout() async {
-  //   return await repository.logout();
-  // }
 }

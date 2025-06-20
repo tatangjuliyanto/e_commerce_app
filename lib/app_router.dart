@@ -1,3 +1,5 @@
+import 'package:e_commerce_app/features/auth/presentation/pages/forgot_password_page.dart';
+
 import 'features/trending/presentation/pages/trending_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +34,8 @@ class AppRouter {
           state.matchedLocation == '/register';
       if (!isLoggedIn &&
           !isGoingToLogin &&
-          state.matchedLocation != '/onboarding') {
+          state.matchedLocation != '/onboarding' &&
+          state.matchedLocation != '/forgot-password') {
         return '/login';
       }
       if (isLoggedIn && isGoingToLogin) {
@@ -69,14 +72,14 @@ class AppRouter {
               child: RegisterPage(),
             ),
       ),
-      // GoRoute(
-      //   path: '/forgot-password',
-      //   builder:
-      //       (context, state) => BlocProvider.value(
-      //         value: sl<AuthBloc>(),
-      //         child: ForgotPasswordPage(),
-      //       ),
-      // ),
+      GoRoute(
+        path: '/forgot-password',
+        builder:
+            (context, state) => BlocProvider.value(
+              value: sl<AuthBloc>(),
+              child: ForgotPasswordPage(),
+            ),
+      ),
 
       //--------------------------------------------------
       // ALL Routes In Home Tab
