@@ -46,9 +46,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     try {
-      // TODO: Implement proper add to cart logic
       if (state is ProductDetailLoaded) {
-        emit(state);
+        final currentState = state as ProductDetailLoaded;
+        // Assuming you have a cart model and a way to add products to it
+        // For demonstration, just emit a state indicating added to cart
+        // emit(ProductAddedToCart(product: currentState.product));
+      } else {
+        emit(ProductError(message: "Product details not loaded."));
       }
     } catch (e) {
       emit(ProductError(message: e.toString()));

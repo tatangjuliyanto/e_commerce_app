@@ -40,14 +40,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
       body: BlocListener<ProductBloc, ProductState>(
         listener: (context, state) {
-          if (state is ProductCartSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
+          //TODO FIXIT
+          // if (state is ProductCartSuccess) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       content: Text(state.message),
+          //       backgroundColor: Colors.green,
+          //     ),
+          //   );
+          // }
         },
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {

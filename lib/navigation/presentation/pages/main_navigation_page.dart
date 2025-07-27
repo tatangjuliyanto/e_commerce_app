@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../features/notification/presentation/pages/notification_page.dart';
-import '../../../features/products/presentation/pages/product/product_page.dart';
+import '../../../features/products/presentation/pages/product_page.dart';
 import '../../../features/profile/presentation/pages/profile_page.dart';
 import '../../../features/trending/presentation/pages/trending_page.dart';
 
