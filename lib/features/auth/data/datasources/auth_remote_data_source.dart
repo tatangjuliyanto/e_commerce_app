@@ -1,5 +1,5 @@
-import 'package:e_commerce_app/features/auth/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);
