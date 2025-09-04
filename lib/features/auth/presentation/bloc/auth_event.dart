@@ -1,10 +1,17 @@
-abstract class AuthEvent {}
+import 'package:equatable/equatable.dart';
+
+abstract class AuthEvent extends Equatable {
+  const AuthEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class AuthLoginEvent extends AuthEvent {
   final String email;
   final String password;
 
-  AuthLoginEvent(this.email, this.password);
+  const AuthLoginEvent(this.email, this.password);
 }
 
 class AuthRegisterEvent extends AuthEvent {
@@ -12,25 +19,21 @@ class AuthRegisterEvent extends AuthEvent {
   final String email;
   final String password;
 
-  AuthRegisterEvent(this.name, this.email, this.password);
+  const AuthRegisterEvent(this.name, this.email, this.password);
 }
 
-class AuthLogoutEvent extends AuthEvent {
-  AuthLogoutEvent();
-}
-
-class ForgotPasswordEvent extends AuthEvent {
+class ForgotPasswordRequested extends AuthEvent {
   final String email;
 
-  ForgotPasswordEvent(this.email);
-  @override
-  String toString() => 'ForgotPasswordEvent: $email';
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is ForgotPasswordEvent && other.email == email;
-  }
+  const ForgotPasswordRequested(this.email);
 
   @override
-  int get hashCode => email.hashCode;
+  List<Object> get props => [email];
+}
+
+class AuthStateReset extends AuthEvent {}
+
+//Logout Event
+class AuthLogoutEvent extends AuthEvent {
+  const AuthLogoutEvent();
 }

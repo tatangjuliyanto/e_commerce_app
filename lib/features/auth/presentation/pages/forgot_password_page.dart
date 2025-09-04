@@ -55,6 +55,38 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
     super.dispose();
   }
 
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.green, size: 28),
+              const SizedBox(width: 12),
+              const Text('Success'),
+            ],
+          ),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+                context.go('/login'); // Navigate to login
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.deepPurple),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,14 +106,29 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthErrorState) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
-              } else if (state is SuccessSendEmail) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Password reset link sent!')),
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 );
-                context.go('/login');
+              } else if (state is ForgotPasswordFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.error),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                );
+              } else if (state is ForgotPasswordSuccess) {
+                _showSuccessDialog(state.message);
               }
             },
             builder: (context, state) {
@@ -174,6 +221,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                 TextFormField(
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
+                                  enabled: state is! AuthLoadingState,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
                                     prefixIcon: const Icon(
@@ -184,7 +232,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                       borderSide: BorderSide.none,
                                     ),
                                     filled: true,
-                                    fillColor: Colors.grey.shade100,
+                                    fillColor:
+                                        state is AuthLoadingState
+                                            ? Colors.grey.shade200
+                                            : Colors.grey.shade100,
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: const BorderSide(
@@ -232,20 +283,28 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                             : () {
                                               if (_formKey.currentState!
                                                   .validate()) {
+                                                FocusScope.of(
+                                                  context,
+                                                ).unfocus();
+
                                                 context.read<AuthBloc>().add(
-                                                  ForgotPasswordEvent(
+                                                  ForgotPasswordRequested(
                                                     emailController.text.trim(),
                                                   ),
                                                 );
                                               }
                                             },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.deepPurple,
+                                      backgroundColor:
+                                          state is AuthLoadingState
+                                              ? Colors.grey
+                                              : Colors.deepPurple,
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      elevation: 0,
+                                      elevation:
+                                          state is AuthLoadingState ? 0 : 2,
                                     ),
                                     child:
                                         state is AuthLoadingState
@@ -270,13 +329,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
 
                                 // Back to Login
                                 TextButton(
-                                  onPressed: () {
-                                    context.go('/login');
-                                  },
+                                  onPressed:
+                                      state is AuthLoadingState
+                                          ? null
+                                          : () {
+                                            context.go('/login');
+                                          },
                                   child: Text(
                                     'Back to Sign In',
                                     style: TextStyle(
-                                      color: Colors.deepPurple,
+                                      color:
+                                          state is AuthLoadingState
+                                              ? Colors.grey
+                                              : Colors.deepPurple,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),

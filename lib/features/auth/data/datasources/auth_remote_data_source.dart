@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import '../models/user_model.dart';
 
@@ -45,7 +46,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> forgotpassword(String email) async {
-    await firebaseAuth.sendPasswordResetEmail(email: email);
-    return UserModel(uid: '', name: '', email: email, password: '');
+    final signInMethods = await firebaseAuth.fetchSignInMethodsForEmail(email);
+    if (signInMethods.isEmpty) {
+      throw Exception(
+        'No account found with this email address. Please check your email or sign up first.',
+      );
+    }
+    if (signInMethods.isNotEmpty) {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      return UserModel(uid: '', name: '', email: email, password: '');
+    }
+    throw Exception('Failed to send password reset email. Please try again.');
   }
 }

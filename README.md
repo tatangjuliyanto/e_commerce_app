@@ -1,4 +1,7 @@
 # e_commerce_app
+# Account
+# username : tatangjulianto05@gmail.com 
+# pass      : User1234
 
 A new Flutter project.
 

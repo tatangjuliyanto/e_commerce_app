@@ -4,7 +4,4 @@ abstract class AuthRepository {
   Future<User> login(String email, String password);
   Future<User> register(String name, String email, String password);
   Future<User> forgotpassword(String email);
-  // Future<User> loginWithGoogle();
-  // Future<User> registerWithGoogle();
-  // Future<void> logout();
 }

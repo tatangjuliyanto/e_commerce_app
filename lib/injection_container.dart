@@ -42,7 +42,10 @@ Future<void> init() async {
   //-----------------------------------------------------------------
 
   // Auth Bloc
-  sl.registerLazySingleton(() => AuthBloc(loginUser: sl(), registerUser: sl()));
+  sl.registerLazySingleton(
+    () =>
+        AuthBloc(loginUser: sl(), registerUser: sl(), forgotPasswordUser: sl()),
+  );
   // Use cases
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
