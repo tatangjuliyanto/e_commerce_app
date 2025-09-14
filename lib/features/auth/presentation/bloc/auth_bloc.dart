@@ -30,7 +30,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final user = await loginUser(event.email, event.password);
       emit(AuthenticatedState(user));
     } catch (e) {
-      emit(AuthErrorState(e.toString()));
+      emit(
+        AuthErrorState(
+          // 'Login failed. Please check your email and password and try again. Details: ${e.toString()}',
+          'Login failed. Please check your email and password and try again.',
+        ),
+      );
     }
   }
 
@@ -43,22 +48,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final user = await registerUser(event.name, event.email, event.password);
       emit(AuthenticatedState(user));
     } catch (e) {
-      emit(AuthErrorState(e.toString()));
+      emit(
+        AuthErrorState(
+          // 'Registration Failer please try again later',
+          'Registration failed. Please try again later. Details: ${e.toString()}',
+        ),
+      );
     }
   }
-
-  // Future<void> _onForgotPasswordRequested(
-  //   ForgotPasswordRequested event,
-  //   Emitter<AuthState> emit,
-  // ) async {
-  //   emit(AuthLoadingState());
-  //   try {
-  //     final user = await forgotPasswordUser(event.email);
-  //     emit(ForgotPasswordSuccess('Password reset link sent to ${user.email}'));
-  //   } catch (e) {
-  //     emit(AuthErrorState(e.toString()));
-  //   }
-  // }
 
   Future<void> _onForgotPasswordRequested(
     ForgotPasswordRequested event,

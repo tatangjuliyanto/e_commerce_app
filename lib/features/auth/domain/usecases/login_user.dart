@@ -9,8 +9,4 @@ class LoginUser {
   Future<User> call(String email, String password) async {
     return await repository.login(email, password);
   }
-
-  // Future<User> loginWithGoogle() async {
-  //   return await repository.loginWithGoogle();
-  // }
 }

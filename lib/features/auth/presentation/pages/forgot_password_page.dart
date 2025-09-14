@@ -46,6 +46,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
     );
 
     _animationController.forward();
+
+    // Reset state when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthBloc>().add(AuthStateReset());
+    });
   }
 
   @override
@@ -66,20 +71,156 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
           ),
           title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 28),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.mark_email_read,
+                  color: Colors.green.shade600,
+                  size: 24,
+                ),
+              ),
               const SizedBox(width: 12),
-              const Text('Success'),
+              const Text('Email Sent!'),
             ],
           ),
-          content: Text(message),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(message),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.blue.shade200),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: Colors.blue.shade600,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Don\'t see the email? Check your spam folder.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue.shade600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-                context.go('/login'); // Navigate to login
+                Navigator.of(context).pop();
+                context.go('/login');
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.deepPurple,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+              ),
+              child: const Text('Back to Sign In'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(String error) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.error_outline,
+                  color: Colors.red.shade600,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text('Error'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(error),
+              const SizedBox(height: 16),
+              if (error.contains('No account found'))
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.shade200),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.lightbulb_outline,
+                        color: Colors.orange.shade600,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Try signing up instead if you don\'t have an account yet.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.orange.shade600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          actions: [
+            if (error.contains('No account found'))
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.go('/register');
+                },
+                style: TextButton.styleFrom(foregroundColor: Colors.orange),
+                child: const Text('Sign Up'),
+              ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(foregroundColor: Colors.deepPurple),
-              child: const Text('OK'),
+              child: const Text('Try Again'),
             ),
           ],
         );
@@ -106,32 +247,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthErrorState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                );
+                _showErrorDialog(state.message);
               } else if (state is ForgotPasswordFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.error),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                );
+                _showErrorDialog(state.error);
               } else if (state is ForgotPasswordSuccess) {
                 _showSuccessDialog(state.message);
               }
             },
+            buildWhen: (previous, current) {
+              // Only rebuild when loading state changes or returning to initial
+              return (previous is AuthLoadingState &&
+                      current is! AuthLoadingState) ||
+                  (previous is! AuthLoadingState &&
+                      current is AuthLoadingState) ||
+                  current is AuthInitialState;
+            },
             builder: (context, state) {
+              final isLoading = state is AuthLoadingState;
+
               return Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(24.0),
@@ -186,11 +319,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Enter your email to reset your password',
+                              'Enter your registered email to reset your password',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white.withOpacity(0.8),
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -221,11 +355,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                 TextFormField(
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
-                                  enabled: state is! AuthLoadingState,
+                                  enabled: !isLoading,
                                   decoration: InputDecoration(
-                                    labelText: 'Email',
-                                    prefixIcon: const Icon(
+                                    labelText: 'Email Address',
+                                    hintText: 'Enter your registered email',
+                                    prefixIcon: Icon(
                                       Icons.email_outlined,
+                                      color: isLoading ? Colors.grey : null,
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -233,7 +369,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                     ),
                                     filled: true,
                                     fillColor:
-                                        state is AuthLoadingState
+                                        isLoading
                                             ? Colors.grey.shade200
                                             : Colors.grey.shade100,
                                     focusedBorder: OutlineInputBorder(
@@ -260,12 +396,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your email';
+                                      return 'Please enter your email address';
                                     }
                                     if (!RegExp(
                                       r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                                     ).hasMatch(value)) {
-                                      return 'Please enter a valid email';
+                                      return 'Please enter a valid email address';
                                     }
                                     return null;
                                   },
@@ -278,7 +414,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                   height: 56,
                                   child: ElevatedButton(
                                     onPressed:
-                                        state is AuthLoadingState
+                                        isLoading
                                             ? null
                                             : () {
                                               if (_formKey.currentState!
@@ -289,32 +425,47 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
 
                                                 context.read<AuthBloc>().add(
                                                   ForgotPasswordRequested(
-                                                    emailController.text.trim(),
+                                                    emailController.text
+                                                        .trim()
+                                                        .toLowerCase(),
                                                   ),
                                                 );
                                               }
                                             },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
-                                          state is AuthLoadingState
-                                              ? Colors.grey
+                                          isLoading
+                                              ? Colors.grey.shade400
                                               : Colors.deepPurple,
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      elevation:
-                                          state is AuthLoadingState ? 0 : 2,
+                                      elevation: isLoading ? 0 : 2,
                                     ),
                                     child:
-                                        state is AuthLoadingState
-                                            ? const SizedBox(
-                                              width: 24,
-                                              height: 24,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                                strokeWidth: 2,
-                                              ),
+                                        isLoading
+                                            ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        color: Colors.white,
+                                                        strokeWidth: 2,
+                                                      ),
+                                                ),
+                                                const SizedBox(width: 12),
+                                                const Text(
+                                                  'Checking email...',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ],
                                             )
                                             : const Text(
                                               'Send Reset Link',
@@ -330,16 +481,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                                 // Back to Login
                                 TextButton(
                                   onPressed:
-                                      state is AuthLoadingState
+                                      isLoading
                                           ? null
                                           : () {
+                                            context.read<AuthBloc>().add(
+                                              AuthStateReset(),
+                                            );
                                             context.go('/login');
                                           },
                                   child: Text(
                                     'Back to Sign In',
                                     style: TextStyle(
                                       color:
-                                          state is AuthLoadingState
+                                          isLoading
                                               ? Colors.grey
                                               : Colors.deepPurple,
                                       fontWeight: FontWeight.w600,

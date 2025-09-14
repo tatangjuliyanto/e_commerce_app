@@ -1,0 +1,28 @@
+import 'package:e_commerce_app/features/profile/domain/usecases/get_profile_user.dart';
+import 'package:e_commerce_app/features/profile/presentation/bloc/profile_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'profile_event.dart';
+
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  final GetProfileUser getProfileUser;
+
+  ProfileBloc({required this.getProfileUser}) : super(ProfileInitial()) {
+    on<GetProfileEvent>(_onGetProfileEvent);
+  }
+
+  Future<void> _onGetProfileEvent(
+    GetProfileEvent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(ProfileLoading());
+    try {
+      final profile = await getProfileUser(event.userId);
+      emit(
+        ProfileLoaded(id: profile.id, name: profile.name, email: profile.email),
+      );
+    } catch (e) {
+      emit(ProfileError('Failed to load profile'));
+    }
+  }
+}

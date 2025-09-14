@@ -13,22 +13,30 @@ import 'package:e_commerce_app/features/products/domain/usecases/get_product_det
 import 'package:e_commerce_app/features/products/domain/usecases/get_products.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/shared/presentation/bloc/onboarding_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // Inisialisasi Firebase
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
+
+  // Inisialisasi Supabase
+  const supabaseUrl = 'https://iqypstdngykbrznoeeng.supabase.co';
+  const supabaseKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXBzdGRuZ3lrYnJ6bm9lZW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1NDA2OTYsImV4cCI6MjA3MzExNjY5Nn0.jdAw00eHmVTmjleuFKtIAtKifpd0GMPs5WKkyBvQ91k';
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
 
   //approuter
   sl.registerLazySingleton<AppRouter>(() => AppRouter());
 
-  // External
-  sl.registerLazySingleton(() => FirebaseAuth.instance);
+  // Supabase clientd
+  sl.registerLazySingleton(() => Supabase.instance.client);
+
+  //Firebase
+  // sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => http.Client());
 
   //-----------------------------------------------------------------
@@ -58,7 +66,8 @@ Future<void> init() async {
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(firebaseAuth: sl()),
+    // () => AuthRemoteDataSourceImpl(firebaseAuth: sl()),
+    () => AuthRemoteDataSupabaseSourceImpl(supabaseAuth: sl()),
   );
 
   //
