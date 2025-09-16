@@ -1,14 +1,10 @@
-import 'package:e_commerce_app/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../data/repositories/profile_repository_impl.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
-import '../../domain/usecases/get_profile_user.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
