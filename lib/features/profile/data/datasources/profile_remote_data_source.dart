@@ -12,7 +12,9 @@ abstract class ProfileRemoteDataSource {
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
-  final supabase = Supabase.instance.client;
+  final SupabaseClient supabase;
+
+  ProfileRemoteDataSourceImpl(this.supabase);
 
   @override
   Future<ProfileModel> getProfile(String id) async {
@@ -25,17 +27,6 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       name: user.userMetadata?['name'] ?? '',
       email: user.email ?? '',
     );
-    // final response =
-    //     await supabase.from('users').select().eq('id', user.id).maybeSingle();
-    // print('Response: $response');
-    // if (response == null) {
-    //   throw Exception('Profile not found');
-    // }
-    // return ProfileModel(
-    //   id: response['id'],
-    //   name: response['name'] ?? '',
-    //   email: response['email'] ?? '',
-    // );
   }
 
   @override

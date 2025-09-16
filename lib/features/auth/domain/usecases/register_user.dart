@@ -9,8 +9,4 @@ class RegisterUser {
   Future<User> call(String name, String email, String password) async {
     return await repository.register(name, email, password);
   }
-
-  // Future<User> registerWithGoole() async {
-  //   return await repository.registerWithGoogle();
-  // }
 }

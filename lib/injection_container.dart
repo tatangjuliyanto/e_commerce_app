@@ -12,6 +12,11 @@ import 'package:e_commerce_app/features/products/domain/repositories/product_rep
 import 'package:e_commerce_app/features/products/domain/usecases/get_product_detail.dart';
 import 'package:e_commerce_app/features/products/domain/usecases/get_products.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
+import 'package:e_commerce_app/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:e_commerce_app/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:e_commerce_app/features/profile/domain/repositories/profile_repository.dart';
+import 'package:e_commerce_app/features/profile/domain/usecases/get_profile_user.dart';
+import 'package:e_commerce_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:e_commerce_app/shared/presentation/bloc/onboarding_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -68,6 +73,26 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRemoteDataSource>(
     // () => AuthRemoteDataSourceImpl(firebaseAuth: sl()),
     () => AuthRemoteDataSupabaseSourceImpl(supabaseAuth: sl()),
+  );
+
+  //-----------------------------------------------------------------
+  //                    Features - Profile
+  //-----------------------------------------------------------------
+
+  // Profile Bloc
+  sl.registerFactory(() => ProfileBloc(getProfileUser: sl<GetProfileUser>()));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetProfileUser(sl()));
+
+  // Repository
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(profileRemoteDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(Supabase.instance.client),
   );
 
   //
