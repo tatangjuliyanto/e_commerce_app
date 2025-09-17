@@ -9,6 +9,15 @@ abstract class ProfileEvent extends Equatable {
 
 class LoadProfileEvent extends ProfileEvent {}
 
+class GetprofileEvent extends ProfileEvent {
+  final String id;
+
+  const GetprofileEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 // TODO: implement updateProfile & another events
 class UpdateProfileEvent extends ProfileEvent {
   final String name;
