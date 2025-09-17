@@ -29,10 +29,26 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     );
   }
 
+  //TODO: Not finished yet
   @override
   Future<ProfileModel> updateProfile(String name, String email) {
-    // TODO: implement updateProfile
-    throw UnimplementedError();
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+    return supabase.auth
+        .updateUser(UserAttributes(email: email, data: {'name': name}))
+        .then((response) {
+          final updatedUser = response.user;
+          if (updatedUser == null) {
+            throw Exception('Failed to update user');
+          }
+          return ProfileModel(
+            id: updatedUser.id,
+            name: updatedUser.userMetadata?['name'] ?? '',
+            email: updatedUser.email ?? '',
+          );
+        });
   }
 
   @override
@@ -40,13 +56,29 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     String currentPassword,
     String newPassword,
   ) {
-    // TODO: implement changePassword
-    throw UnimplementedError();
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+    return supabase.auth.updateUser(UserAttributes(password: newPassword)).then(
+      (response) {
+        final updateUser = response.user;
+        if (updateUser == null) {
+          throw Exception('Failed to update password');
+        }
+        return ProfileModel(
+          id: updateUser.id,
+          email: updateUser.email ?? '',
+          name: updateUser.userMetadata?['name'] ?? '',
+        );
+      },
+    );
   }
 
   @override
   Future<ProfileModel> singOut() {
-    // TODO: implement singOut
-    throw UnimplementedError();
+    return supabase.auth.signOut().then((_) {
+      throw Exception('User signed out');
+    });
   }
 }

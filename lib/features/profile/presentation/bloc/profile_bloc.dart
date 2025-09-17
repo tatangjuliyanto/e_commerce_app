@@ -9,23 +9,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetProfileUser getProfileUser;
 
   ProfileBloc({required this.getProfileUser}) : super(ProfileInitial()) {
-    // on<GetProfileEvent>(_onGetProfileEvent);
-    on<LoadProfileEvent>(_onLoadProfileEvent);
+    on<GetprofileEvent>(_onGetprofileEvent);
   }
 
-  Future<void> _onLoadProfileEvent(
-    LoadProfileEvent event,
+  Future<void> _onGetprofileEvent(
+    GetprofileEvent event,
     Emitter<ProfileState> emit,
   ) async {
     emit(ProfileLoading());
     try {
-      final user = Supabase.instance.client.auth.currentUser;
-      if (user == null) {
-        emit(ProfileError("User not authenticated"));
-        return;
-      }
-
-      final profile = await getProfileUser(user.id);
+      final profile = await getProfileUser(event.userId);
       emit(
         ProfileLoaded(id: profile.id, name: profile.name, email: profile.email),
       );

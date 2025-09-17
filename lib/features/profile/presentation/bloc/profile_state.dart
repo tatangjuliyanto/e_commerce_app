@@ -24,14 +24,6 @@ class ProfileLoaded extends ProfileState {
 
   @override
   List<Object> get props => [id, name, email];
-
-  factory ProfileLoaded.fromJson(Map<String, dynamic> json) {
-    return ProfileLoaded(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-    );
-  }
 }
 
 //TODO: implement ProfileError & another states NOT USED YET

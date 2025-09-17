@@ -13,11 +13,11 @@ class MainNavigationPage extends StatefulWidget {
 
 class _MainNavigationPagesState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    ProductPage(),
-    TrendingPage(),
-    NotificationPage(),
-    ProfilePage(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const ProductPage(),
+    const TrendingPage(),
+    const NotificationPage(),
+    ProfilePage(userId: 'current_user_id'),
   ];
 
   void _onItemTapped(int index) {
