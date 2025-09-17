@@ -6,12 +6,10 @@
         <td><img src="./assets/docs/signin_page.png" width="300"></td>
         <td><img src="./assets/docs/signup_page.png" width="300"></td>
         <td><img src="./assets/docs/forgot-password_page.png" width="300"></td>
-        <td><img src="./assets/docs/home_page.png" width="300"></td>
-        <td><img src="./assets/docs/profile_page.png" width="300"></td>
     </tr>
     <tr>
-        <td><img src="./assets/docs/profile.png" width="300"></td>
-        <td><img src="./assets/docs/search.png" width="300"></td>
+        <td><img src="./assets/docs/home_page.png" width="300"></td>
+        <td><img src="./assets/docs/profile_page.png" width="300"></td>
     </tr>
 </table>
 
