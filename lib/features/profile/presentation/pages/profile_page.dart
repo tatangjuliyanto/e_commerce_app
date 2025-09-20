@@ -1,24 +1,22 @@
+import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:e_commerce_app/features/profile/presentation/bloc/profile_event.dart';
 import 'package:e_commerce_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
+import '../../../auth/presentation/bloc/auth_event.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_state.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   final String userId;
   const ProfilePage({super.key, required this.userId});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<ProfileBloc>()..add(GetprofileEvent(widget.userId)),
+      create: (_) => sl<ProfileBloc>()..add(GetprofileEvent(userId)),
       child: Scaffold(
         appBar: AppBar(title: Text('Profile')),
         body: BlocBuilder<ProfileBloc, ProfileState>(
@@ -87,10 +85,36 @@ class _ProfilePageState extends State<ProfilePage> {
                             size: 16,
                           ),
                           onTap: () async {
-                            await Supabase.instance.client.auth.signOut();
-                            if (context.mounted) {
-                              Navigator.pushReplacementNamed(context, '/login');
-                            }
+                            final shouldLogout = await showDialog<bool>(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: const Text('Logout Confirmation'),
+                                    content: const Text(
+                                      'Are you sure you want to logout?',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.of(
+                                              context,
+                                            ).pop(false),
+                                        child: const Text('Batal'),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        onPressed:
+                                            () =>
+                                                Navigator.of(context).pop(true),
+                                        child: const Text('Logout'),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                            if (shouldLogout != true) return;
+                            context.read<AuthBloc>().add((AuthLogoutEvent()));
                           },
                         ),
                       ],

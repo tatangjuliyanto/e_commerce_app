@@ -8,7 +8,6 @@ abstract class ProfileRemoteDataSource {
     String currentPassword,
     String newPassword,
   );
-  Future<ProfileModel> singOut();
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -29,7 +28,6 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     );
   }
 
-  //TODO: Not finished yet
   @override
   Future<ProfileModel> updateProfile(String name, String email) {
     final user = supabase.auth.currentUser;
@@ -73,12 +71,5 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         );
       },
     );
-  }
-
-  @override
-  Future<ProfileModel> singOut() {
-    return supabase.auth.signOut().then((_) {
-      throw Exception('User signed out');
-    });
   }
 }

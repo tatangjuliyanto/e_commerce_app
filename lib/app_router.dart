@@ -28,19 +28,28 @@ class AppRouter {
     redirect: (context, state) {
       final authState = authBloc.state;
       final isLoggedIn = authState is AuthenticatedState;
-      final isGoingToLogin =
-          state.matchedLocation == '/onboarding' ||
-          state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register';
-      if (!isLoggedIn &&
-          !isGoingToLogin &&
-          state.matchedLocation != '/onboarding' &&
-          state.matchedLocation != '/forgot-password') {
+      final publicRoutes = [
+        '/onboarding',
+        '/login',
+        '/register',
+        '/forgot-password',
+      ];
+      final isPublicRoute = publicRoutes.contains(state.matchedLocation);
+
+      if (!isLoggedIn && !isPublicRoute) {
         return '/login';
       }
-      if (isLoggedIn && isGoingToLogin) {
+
+      if (isLoggedIn &&
+          (state.matchedLocation == '/onboarding' ||
+              state.matchedLocation == '/login' ||
+              state.matchedLocation == '/register')) {
         return '/home';
       }
+      if (authState is AuthLoadingState) {
+        return null;
+      }
+
       return null;
     },
     routes: [

@@ -27,9 +27,4 @@ class ProfileRepositoryImpl implements ProfileRepository {
       newPassword,
     );
   }
-
-  @override
-  Future<ProfileEntities> signOut() async {
-    return await profileRemoteDataSource.singOut();
-  }
 }

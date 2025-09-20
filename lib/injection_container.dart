@@ -22,6 +22,8 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'features/auth/domain/usecases/logout_user.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -56,13 +58,18 @@ Future<void> init() async {
 
   // Auth Bloc
   sl.registerLazySingleton(
-    () =>
-        AuthBloc(loginUser: sl(), registerUser: sl(), forgotPasswordUser: sl()),
+    () => AuthBloc(
+      loginUser: sl(),
+      registerUser: sl(),
+      forgotPasswordUser: sl(),
+      logoutUser: sl(),
+    ),
   );
   // Use cases
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
   sl.registerLazySingleton(() => ForgotPasswordUser(sl()));
+  sl.registerLazySingleton(() => LogoutUser(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
@@ -80,10 +87,16 @@ Future<void> init() async {
   //-----------------------------------------------------------------
 
   // Profile Bloc
-  sl.registerFactory(() => ProfileBloc(getProfileUser: sl<GetProfileUser>()));
+  sl.registerFactory(
+    () => ProfileBloc(
+      getProfileUser: sl<GetProfileUser>(),
+      // logoutUser: sl<LogoutUser>(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetProfileUser(sl()));
+  // sl.registerLazySingleton(() => LogoutUser(sl()));
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(

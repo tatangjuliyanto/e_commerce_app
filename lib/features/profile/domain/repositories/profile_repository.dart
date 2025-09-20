@@ -7,5 +7,4 @@ abstract class ProfileRepository {
     String currentPassword,
     String newPassword,
   );
-  Future<ProfileEntities> signOut();
 }

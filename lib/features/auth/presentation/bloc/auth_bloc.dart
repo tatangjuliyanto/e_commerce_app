@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/features/auth/domain/usecases/logout_user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/login_user.dart';
@@ -10,16 +11,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUser loginUser;
   final RegisterUser registerUser;
   final ForgotPasswordUser forgotPasswordUser;
+  final LogoutUser logoutUser;
 
   AuthBloc({
     required this.loginUser,
     required this.registerUser,
     required this.forgotPasswordUser,
+    required this.logoutUser,
   }) : super(AuthInitialState()) {
     on<AuthLoginEvent>(_onAuthLoginEvent);
     on<AuthRegisterEvent>(_onAuthRegisterEvent);
     on<ForgotPasswordRequested>(_onForgotPasswordRequested);
     on<AuthStateReset>(_onAuthStateReset);
+    on<AuthLogoutEvent>(_onAuthLogoutEvent);
   }
   Future<void> _onAuthLoginEvent(
     AuthLoginEvent event,
@@ -72,6 +76,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     } catch (e) {
       emit(ForgotPasswordFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onAuthLogoutEvent(
+    AuthLogoutEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoadingState());
+    try {
+      await logoutUser();
+      emit(UnauthenticatedState());
+    } catch (e) {
+      emit(
+        AuthErrorState(
+          'Logout failed. Please try again later. Details: ${e.toString()}',
+        ),
+      );
     }
   }
 

@@ -1,7 +1,6 @@
 import 'package:e_commerce_app/features/profile/domain/usecases/get_profile_user.dart';
 import 'package:e_commerce_app/features/profile/presentation/bloc/profile_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'profile_event.dart';
 
