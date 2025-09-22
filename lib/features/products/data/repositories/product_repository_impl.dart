@@ -16,10 +16,4 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<Product> getProductDetail(String productId) async {
     return await remoteDataSource.getProductsDetail(productId);
   }
-
-  // @override
-  // Future<Product> addToCart(Product product) async {
-  //   final productModel = ProductModel.fromEntity(product);
-  //   return await remoteDataSource.addToCart(productModel);
-  // }
 }

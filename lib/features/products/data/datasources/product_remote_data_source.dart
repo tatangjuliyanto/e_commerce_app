@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts();
   Future<ProductModel> getProductsDetail(String productId);
-  // Future<ProductModel> addToCart(ProductModel product);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -55,27 +54,4 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       throw Exception('Failed to Load Product Detail: $e');
     }
   }
-
-  // @override
-  // Future<ProductModel> addToCart(ProductModel product) async {
-  //   try {
-  //     final response = await client
-  //         .post(
-  //           Uri.parse('$_baseUrl/${product.id}/addToCart'),
-  //           headers: {'Content-Type': 'application/json'},
-  //           body: jsonEncode({'id': product.id}),
-  //         )
-  //         .timeout(_timeoutDuration);
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       return ProductModel.fromJson(data);
-  //     } else {
-  //       throw Exception(
-  //         'Failed to add product to cart: ${response.statusCode}',
-  //       );
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Failed to add product to cart: $e');
-  //   }
-  // }
 }
