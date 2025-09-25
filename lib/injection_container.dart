@@ -6,6 +6,10 @@ import 'package:e_commerce_app/features/auth/domain/usecases/forgot_password_use
 import 'package:e_commerce_app/features/auth/domain/usecases/login_user.dart';
 import 'package:e_commerce_app/features/auth/domain/usecases/register_user.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/add_to_cart_use_case.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/get_cart_use_case.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/remove_from_cart_use_case.dart';
+import 'package:e_commerce_app/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/features/products/data/repositories/product_repository_impl.dart';
 import 'package:e_commerce_app/features/products/data/datasources/product_remote_data_source.dart';
 import 'package:e_commerce_app/features/products/domain/repositories/product_repository.dart';
@@ -23,6 +27,9 @@ import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'features/auth/domain/usecases/logout_user.dart';
+import 'features/cart/data/datasources/cart_remote_data_source.dart';
+import 'features/cart/data/repositories/cart_repository_impl.dart';
+import 'features/cart/domain/repositories/cart_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -133,5 +140,40 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(sl()),
+  );
+
+  //
+  //-----------------------------------------------------------------
+  //                    Features - Cart
+  //-----------------------------------------------------------------
+
+  // Cart Bloc
+  sl.registerFactory(
+    () => CartBloc(
+      getCart: sl<GetCartUseCase>(),
+      addToCart: sl<AddToCartUseCase>(),
+      removeFromCart: sl<RemoveFromCartUseCase>(),
+    ),
+  );
+
+  // Repository
+  sl.registerLazySingleton<CartRepository>(
+    () => CartRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Use cases
+  sl.registerLazySingleton<AddToCartUseCase>(
+    () => AddToCartUseCase(sl<CartRepository>()),
+  );
+  sl.registerLazySingleton<GetCartUseCase>(
+    () => GetCartUseCase(sl<CartRepository>()),
+  );
+  sl.registerLazySingleton<RemoveFromCartUseCase>(
+    () => RemoveFromCartUseCase(sl<CartRepository>()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<CartRemoteDataSource>(
+    () => CartRemoteDataSourceImpl(sl()),
   );
 }

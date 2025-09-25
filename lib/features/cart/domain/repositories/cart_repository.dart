@@ -4,6 +4,5 @@ import '../entities/cart_entity.dart';
 abstract class CartRepository {
   Future<CartEntity> getCart(String userId);
   Future<void> addToCart(Product product, String userId, int quantity);
-  Future<void> removeFromCart(String productId, String userId);
-  // Future<void> clearCart(String userId);
+  Future<void> removeFromCart(int productId, String userId);
 }

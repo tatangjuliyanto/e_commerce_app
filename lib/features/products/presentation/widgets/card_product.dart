@@ -1,6 +1,12 @@
+import 'package:e_commerce_app/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:e_commerce_app/features/cart/presentation/bloc/cart_event.dart';
 import 'package:e_commerce_app/features/products/domain/entities/product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 
 class CardProduct extends StatelessWidget {
   const CardProduct({super.key, required this.product});
@@ -87,14 +93,23 @@ class CardProduct extends StatelessWidget {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.add_shopping_cart),
-          onPressed: () {
-            // Add to cart functionality
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('${product.title} added to cart'),
-                duration: const Duration(seconds: 2),
-              ),
-            );
+          onPressed: () async {
+            final authState = context.read<AuthBloc>().state;
+
+            if (authState is AuthenticatedState) {
+              final userId = authState.user.uid;
+
+              context.read<CartBloc>().add(
+                AddItemToCartEvent(userId, product, 1),
+              );
+
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text("Added to cart!")));
+            } else {
+              // user belum login
+              context.go('/login');
+            }
           },
         ),
       ),

@@ -1,4 +1,7 @@
+import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:e_commerce_app/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:e_commerce_app/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:e_commerce_app/features/cart/presentation/bloc/cart_event.dart';
 
 import 'features/trending/presentation/pages/trending_page.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,8 @@ import 'shared/presentation/pages/onboarding_page.dart';
 
 class AppRouter {
   final AuthBloc authBloc = sl<AuthBloc>();
+  //TODO: Add to globaly route
+  // final CartBloc cartBloc = sl<CartBloc>();
 
   late final GoRouter router = GoRouter(
     initialLocation: '/onboarding',
@@ -96,8 +101,13 @@ class AppRouter {
       GoRoute(
         path: '/home',
         builder:
-            (context, state) => BlocProvider(
-              create: (_) => di.sl<ProductBloc>()..add(LoadProducts()),
+            (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => di.sl<ProductBloc>()..add(LoadProducts()),
+                ),
+                BlocProvider(create: (_) => di.sl<CartBloc>()),
+              ],
               child: MainNavigationPage(),
             ),
       ),
@@ -105,8 +115,11 @@ class AppRouter {
         path: '/products/:productId',
         builder: (context, state) {
           final productId = state.pathParameters['productId']!;
-          return BlocProvider(
-            create: (_) => sl<ProductBloc>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => di.sl<ProductBloc>()),
+              BlocProvider(create: (_) => di.sl<CartBloc>()),
+            ],
             child: ProductDetailPage(productId: productId),
           );
         },
@@ -121,11 +134,19 @@ class AppRouter {
       ),
       GoRoute(
         path: '/cart',
-        builder:
-            (context, state) => BlocProvider(
-              create: (_) => sl<ProductBloc>(),
-              child: const CartPage(),
-            ),
+        builder: (context, state) {
+          final authState = context.read<AuthBloc>().state;
+
+          if (authState is AuthenticatedState) {
+            return BlocProvider(
+              create: (_) => sl<CartBloc>(),
+              child: CartPage(userId: authState.user.uid),
+            );
+          } else {
+            // kalau belum login redirect ke login
+            return const LoginPage();
+          }
+        },
       ),
 
       //--------------------------------------------------

@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:e_commerce_app/features/cart/data/models/cart_item_model.dart';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class CartRemoteDataSource {
-  Future<List<CartItemModel>> getCartitems(String userId);
+  Future<List<CartItemModel>> getCartItems(String userId);
   Future<void> addToCart(String userId, CartItemModel item);
-  Future<void> removeFromCart(String userId, String productId);
+  Future<void> removeFromCart(String userId, int productId);
 }
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
@@ -12,27 +15,58 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   CartRemoteDataSourceImpl(this.supabase);
 
   @override
-  Future<List<CartItemModel>> getCartitems(String userId) async {
-    final response = await supabase
-        .from('cart')
-        .select('id, user_id, product_id, quantity, products(*)')
-        .eq('user_id', userId);
-    return (response as List)
-        .map((json) => CartItemModel.fromJson(json))
-        .toList();
+  Future<List<CartItemModel>> getCartItems(String userId) async {
+    final response = await supabase.from('cart').select().eq('user_id', userId);
+
+    if (response.isEmpty) {
+      return [];
+    }
+    final items = <CartItemModel>[];
+    for (final row in response) {
+      final productResponse = await http.get(
+        Uri.parse("https://dummyjson.com/products/${row['product_id']}"),
+      );
+      final productData = jsonDecode(productResponse.body);
+
+      items.add(CartItemModel.fromJson(row, productData));
+    }
+
+    return items;
   }
 
   @override
   Future<void> addToCart(String userId, CartItemModel item) async {
-    await supabase.from('cart').insert({
-      'user_id': userId,
-      'product_id': item.product.id,
-      'quantity': item.quantity,
-    });
+    // Cek apakah produk sudah ada
+    final existing =
+        await supabase
+            .from('cart')
+            .select()
+            .eq('user_id', userId)
+            .eq('product_id', item.product.id)
+            .maybeSingle();
+
+    if (existing != null) {
+      // update quantity
+      final newQty = (existing['quantity'] as int) + item.quantity;
+      await supabase
+          .from('cart')
+          .update({
+            'quantity': newQty,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', existing['id']);
+    } else {
+      // insert baru
+      await supabase.from('cart').insert({
+        'user_id': userId,
+        'product_id': item.product.id,
+        'quantity': item.quantity,
+      });
+    }
   }
 
   @override
-  Future<void> removeFromCart(String userId, String productId) async {
+  Future<void> removeFromCart(String userId, int productId) async {
     await supabase
         .from('cart')
         .delete()

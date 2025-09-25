@@ -1,35 +1,33 @@
 import '../../../products/domain/entities/product.dart';
+import '../../domain/entities/cart_entity.dart';
 
 abstract class CartState {
-  final List<Product> cart;
-  CartState({this.cart = const []});
+  const CartState();
 
-  List<Object> get props => [cart];
+  List<Object> get props => [];
+}
+
+class CartInitial extends CartState {
+  @override
+  List<Object> get props => [];
 }
 
 class CartLoading extends CartState {
-  CartLoading({super.cart});
+  CartLoading();
 
   @override
-  List<Object> get props => [cart];
+  List<Object> get props => [];
 }
 
-class AddCart extends CartState {
-  final Product product;
-  AddCart({required this.product, super.cart});
+class CartLoaded extends CartState {
+  final CartEntity cartEntity;
+  CartLoaded({required this.cartEntity});
 
   @override
-  List<Object> get props => [product, cart];
+  List<Object> get props => [cartEntity];
 }
 
-class CartUpdated extends CartState {
-  CartUpdated({super.cart});
-
-  @override
-  List<Object> get props => [cart];
-}
-
-class ProductCartSuccess extends CartState {
+class CartError extends CartState {
   final String message;
-  ProductCartSuccess({required this.message});
+  CartError(this.message);
 }

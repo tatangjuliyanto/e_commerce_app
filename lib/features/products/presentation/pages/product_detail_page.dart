@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/bloc/cart_event.dart';
+
 class ProductDetailPage extends StatefulWidget {
   final String productId;
 
@@ -157,23 +162,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           const SizedBox(height: 24),
           Center(
-            child: ElevatedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${product.title} added to cart'),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
+            child: IconButton(
               icon: const Icon(Icons.add_shopping_cart),
-              label: const Text('Add to Cart'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
+              style: IconButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 199, 193, 193),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
+              onPressed: () async {
+                final authState = context.read<AuthBloc>().state;
+
+                if (authState is AuthenticatedState) {
+                  final userId = authState.user.uid;
+
+                  context.read<CartBloc>().add(
+                    AddItemToCartEvent(userId, product, 1),
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Added to cart!")),
+                  );
+                } else {
+                  // user belum login
+                  context.go('/login');
+                }
+              },
             ),
           ),
         ],
