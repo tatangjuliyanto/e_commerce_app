@@ -1,7 +1,5 @@
-import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:e_commerce_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:e_commerce_app/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:e_commerce_app/features/cart/presentation/bloc/cart_event.dart';
 
 import 'features/trending/presentation/pages/trending_page.dart';
 import 'package:flutter/material.dart';

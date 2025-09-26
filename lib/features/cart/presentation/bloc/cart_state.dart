@@ -1,4 +1,3 @@
-import '../../../products/domain/entities/product.dart';
 import '../../domain/entities/cart_entity.dart';
 
 abstract class CartState {
