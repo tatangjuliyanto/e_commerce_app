@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/features/products/domain/entities/product.dart';
 import 'package:equatable/equatable.dart';
 
 //--------------------------------------
@@ -21,16 +20,4 @@ class LoadProductDetail extends ProductEvent {
 
   @override
   List<Object> get props => [productId];
-}
-
-//------------------------------------
-// Cart Events
-//------------------------------------
-class AddToCartEvent extends ProductEvent {
-  final Product product;
-
-  AddToCartEvent(this.product);
-
-  @override
-  List<Object> get props => [product];
 }
