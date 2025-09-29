@@ -19,7 +19,6 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    // Load cart data when page opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CartBloc>().add(LoadCart(widget.userId));
     });
@@ -156,6 +155,7 @@ class _CartPageState extends State<CartPage> {
                       ],
                     ),
                   ),
+                  Container(),
                 ],
               );
             } else if (state is CartError) {

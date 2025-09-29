@@ -46,7 +46,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     try {
-      await removeFromCart(event.productId as String, event.userId);
+      await removeFromCart(event.productId, event.userId);
       add(LoadCart(event.userId));
     } catch (e) {
       emit(CartError(e.toString()));

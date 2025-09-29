@@ -5,7 +5,7 @@ class RemoveFromCartUseCase {
 
   RemoveFromCartUseCase(this.repository);
 
-  Future<void> call(String productId, String userId) async {
-    return await repository.removeFromCart(productId as int, userId);
+  Future<void> call(int productId, String userId) async {
+    return await repository.removeFromCart(productId, userId);
   }
 }

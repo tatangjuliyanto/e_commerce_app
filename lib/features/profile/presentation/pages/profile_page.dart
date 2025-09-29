@@ -106,7 +106,10 @@ class ProfilePage extends StatelessWidget {
                                         onPressed:
                                             () =>
                                                 Navigator.of(context).pop(true),
-                                        child: const Text('Logout'),
+                                        child: const Text(
+                                          'Logout',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),

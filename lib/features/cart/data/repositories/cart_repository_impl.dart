@@ -27,27 +27,3 @@ class CartRepositoryImpl implements CartRepository {
     return await remoteDataSource.removeFromCart(userId, productId);
   }
 }
-
-// class CartRepositoryImpl implements CartRepository {
-//   final CartRemoteDataSource remoteDataSource;
-
-//   CartRepositoryImpl({required this.remoteDataSource});
-
-//   @override
-//   Future<CartEntity> getCart(String userId) async {
-//     return await remoteDataSource
-//         .getCartitems(userId)
-//         .then((items) => CartEntity(items: items));
-//   }
-
-//   @override
-//   Future<void> addToCart(Product product, String userId, int quantity) async {
-//     final item = CartItemModel(product: product, quantity: quantity);
-//     await remoteDataSource.addToCart(userId, item);
-//   }
-
-//   @override
-//   Future<void> removeFromCart(int productId, String userId) async {
-//     return await remoteDataSource.removeFromCart(userId, productId as String);
-//   }
-// }
