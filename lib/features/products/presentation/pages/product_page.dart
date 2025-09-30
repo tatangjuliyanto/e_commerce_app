@@ -17,7 +17,8 @@ import '../../../cart/presentation/bloc/cart_event.dart';
 import '../../../cart/presentation/bloc/cart_state.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key});
+  // final String remove = ;
+  const ProductPage({super.key, remove});
 
   @override
   State<ProductPage> createState() => _ProductPageState();

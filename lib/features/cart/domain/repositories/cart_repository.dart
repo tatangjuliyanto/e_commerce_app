@@ -5,4 +5,5 @@ abstract class CartRepository {
   Future<CartEntity> getCart(String userId);
   Future<void> addToCart(Product product, String userId, int quantity);
   Future<void> removeFromCart(int productId, String userId);
+  Future<void> updateItemQuantity(String userId, int productId, int newQty);
 }

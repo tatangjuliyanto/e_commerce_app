@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_state.dart';
+import '../widgets/update_item_quantity.dart';
 
 class CartPage extends StatefulWidget {
   final String userId;
@@ -94,11 +95,18 @@ class _CartPageState extends State<CartPage> {
                             ),
                             title: Text(item.product.title),
                             subtitle: Text("Qty: ${item.quantity}"),
-                            trailing: Text(
-                              "\$${(item.product.price * item.quantity)}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+
+                            // trailing: Text(
+                            //   "\$${(item.product.price * item.quantity)}",
+                            //   style: const TextStyle(
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
+                            trailing: UpdateItemQuantityButton(
+                              userId: widget.userId,
+                              productId: item.product.id,
+                              currentQty: item.quantity,
+                              totalPrice: item.product.price * item.quantity,
                             ),
                           ),
                         );

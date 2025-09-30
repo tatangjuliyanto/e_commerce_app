@@ -9,6 +9,7 @@ import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/add_to_cart_use_case.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/get_cart_use_case.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/remove_from_cart_use_case.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/update_item_quantity_use_case.dart';
 import 'package:e_commerce_app/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/features/products/data/repositories/product_repository_impl.dart';
 import 'package:e_commerce_app/features/products/data/datasources/product_remote_data_source.dart';
@@ -153,6 +154,7 @@ Future<void> init() async {
       getCart: sl<GetCartUseCase>(),
       addToCart: sl<AddToCartUseCase>(),
       removeFromCart: sl<RemoveFromCartUseCase>(),
+      updateItemQuantity: sl<UpdateItemQuantityUseCase>(),
     ),
   );
 
@@ -167,6 +169,9 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<GetCartUseCase>(
     () => GetCartUseCase(sl<CartRepository>()),
+  );
+  sl.registerLazySingleton<UpdateItemQuantityUseCase>(
+    () => UpdateItemQuantityUseCase(sl<CartRepository>()),
   );
   sl.registerLazySingleton<RemoveFromCartUseCase>(
     () => RemoveFromCartUseCase(sl<CartRepository>()),

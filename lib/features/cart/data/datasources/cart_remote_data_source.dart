@@ -8,6 +8,7 @@ abstract class CartRemoteDataSource {
   Future<List<CartItemModel>> getCartItems(String userId);
   Future<void> addToCart(String userId, CartItemModel item);
   Future<void> removeFromCart(String userId, int productId);
+  Future<void> updateItemQuantity(String userId, int productId, int newQty);
 }
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
@@ -70,6 +71,22 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
     await supabase
         .from('cart')
         .delete()
+        .eq('user_id', userId)
+        .eq('product_id', productId);
+  }
+
+  @override
+  Future<void> updateItemQuantity(
+    String userId,
+    int productId,
+    int newQty,
+  ) async {
+    await supabase
+        .from('cart')
+        .update({
+          'quantity': newQty,
+          'updated_at': DateTime.now().toIso8601String(),
+        })
         .eq('user_id', userId)
         .eq('product_id', productId);
   }
