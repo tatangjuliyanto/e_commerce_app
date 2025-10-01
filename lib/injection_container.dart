@@ -23,6 +23,7 @@ import 'package:e_commerce_app/features/profile/domain/repositories/profile_repo
 import 'package:e_commerce_app/features/profile/domain/usecases/get_profile_user.dart';
 import 'package:e_commerce_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:e_commerce_app/shared/presentation/bloc/onboarding_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -39,16 +40,14 @@ Future<void> init() async {
   // await Firebase.initializeApp();
 
   // Inisialisasi Supabase
-  const supabaseUrl = 'https://iqypstdngykbrznoeeng.supabase.co';
-  const supabaseKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXBzdGRuZ3lrYnJ6bm9lZW5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1NDA2OTYsImV4cCI6MjA3MzExNjY5Nn0.jdAw00eHmVTmjleuFKtIAtKifpd0GMPs5WKkyBvQ91k';
-  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
+  final supabaseUrl = dotenv.env['SUPABASE_URL']!;
+  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY']!;
 
-  //approuter
-  sl.registerLazySingleton<AppRouter>(() => AppRouter());
-
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
   // Supabase clientd
   sl.registerLazySingleton(() => Supabase.instance.client);
+  //approuter
+  sl.registerLazySingleton<AppRouter>(() => AppRouter());
 
   //Firebase
   // sl.registerLazySingleton(() => FirebaseAuth.instance);

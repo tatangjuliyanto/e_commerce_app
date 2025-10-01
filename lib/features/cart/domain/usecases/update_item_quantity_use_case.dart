@@ -1,6 +1,5 @@
 import 'package:e_commerce_app/features/cart/domain/repositories/cart_repository.dart';
 
-//TODO: fix this
 class UpdateItemQuantityUseCase {
   final CartRepository repository;
 
