@@ -25,7 +25,7 @@ class AppRouter {
   final AuthBloc authBloc = di.sl<AuthBloc>();
 
   static final GlobalKey<NavigatorState> _shellNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'shell');
+      GlobalKey<NavigatorState>();
 
   late final GoRouter router = GoRouter(
     initialLocation: '/onboarding',

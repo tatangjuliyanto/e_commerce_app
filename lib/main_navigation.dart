@@ -62,7 +62,7 @@ class MainNavigation extends StatelessWidget {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, cartState) {
         if (cartState is CartLoaded) {
-          final cartItemCount = cartState.cartEntity.items.length;
+          // final cartItemCount = cartState.cartEntity.items.length;
         }
         return BottomNavigationBar(
           items: <BottomNavigationBarItem>[
