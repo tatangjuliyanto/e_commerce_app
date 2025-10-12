@@ -7,7 +7,7 @@ import 'features/cart/presentation/bloc/cart_bloc.dart';
 import 'features/cart/presentation/bloc/cart_state.dart';
 
 class MainNavigation extends StatelessWidget {
-  final Widget child; // ✅ Child dari GoRouter (current tab page)
+  final Widget child; //  Child dari GoRouter (current tab page)
 
   const MainNavigation({super.key, required this.child});
 
@@ -41,7 +41,7 @@ class MainNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Listen auth changes untuk auto logout
+    // Listen auth changes untuk auto logout
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is UnauthenticatedState) {
@@ -49,7 +49,7 @@ class MainNavigation extends StatelessWidget {
         }
       },
       child: Scaffold(
-        // ✅ Child dari GoRouter (tab content)
+        //  Child dari GoRouter (tab content)
         body: child,
         bottomNavigationBar: _buildBottomNavigationBar(context),
       ),
