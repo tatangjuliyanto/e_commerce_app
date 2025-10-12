@@ -75,7 +75,7 @@ class MainNavigation extends StatelessWidget {
               label: 'Trending',
             ),
             BottomNavigationBarItem(
-              icon: _buildNotificationIcon(3),
+              icon: _buildNotificationIcon(100),
               label: 'Notifications',
             ),
             const BottomNavigationBarItem(
@@ -100,8 +100,10 @@ class MainNavigation extends StatelessWidget {
         const Icon(Icons.notifications),
         if (count > 0)
           Positioned(
-            right: -2,
-            top: -2,
+            right: -15,
+            top: -14,
+            bottom: 20,
+            left: 6,
             child: Container(
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
