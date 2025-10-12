@@ -88,7 +88,12 @@ class _RegisterPageState extends State<RegisterPage>
                 context.go('/home');
               }
               if (state is AuthErrorState) {
-                AppRouter.showError(context, state.message);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
             },
             builder: (context, state) {

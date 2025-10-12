@@ -21,3 +21,6 @@ class CartItemModel extends CartItemEntity {
     );
   }
 }
+
+//TODO : FIX ENtity Model
+class CartEntityModel extends CartEntity {}

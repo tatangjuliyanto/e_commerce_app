@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/app_router.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_state.dart';
@@ -81,7 +80,12 @@ class _LoginPageState extends State<LoginPage>
                 context.go('/home');
               }
               if (state is AuthErrorState) {
-                AppRouter.showError(context, state.message);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
             },
             builder: (context, state) {

@@ -1,6 +1,8 @@
 import 'package:e_commerce_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:e_commerce_app/features/cart/presentation/bloc/cart_bloc.dart';
-
+import 'package:e_commerce_app/features/notification/presentation/pages/notification_page.dart';
+import 'package:e_commerce_app/features/products/presentation/pages/product_page.dart';
+import 'package:e_commerce_app/features/profile/presentation/pages/profile_page.dart';
 import 'features/trending/presentation/pages/trending_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,22 +17,25 @@ import 'features/cart/presentation/pages/cart_page.dart';
 import 'package:e_commerce_app/injection_container.dart' as di;
 import 'package:e_commerce_app/injection_container.dart';
 import 'features/products/presentation/pages/product_detail_page.dart';
-import 'features/search/search_page.dart';
-import 'navigation/presentation/pages/main_navigation_page.dart';
+import 'main_navigation.dart';
 import 'shared/presentation/bloc/onboarding_bloc.dart';
 import 'shared/presentation/pages/onboarding_page.dart';
 
 class AppRouter {
-  final AuthBloc authBloc = sl<AuthBloc>();
-  //TODO: Add to globaly route
-  // final CartBloc cartBloc = sl<CartBloc>();
+  final AuthBloc authBloc = di.sl<AuthBloc>();
+
+  static final GlobalKey<NavigatorState> _shellNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'shell');
 
   late final GoRouter router = GoRouter(
     initialLocation: '/onboarding',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
+
+    // Auth guard di router level (bukan di widget)
     redirect: (context, state) {
       final authState = authBloc.state;
       final isLoggedIn = authState is AuthenticatedState;
+
       final publicRoutes = [
         '/onboarding',
         '/login',
@@ -39,27 +44,30 @@ class AppRouter {
       ];
       final isPublicRoute = publicRoutes.contains(state.matchedLocation);
 
-      if (!isLoggedIn && !isPublicRoute) {
-        return '/login';
-      }
-
-      if (isLoggedIn &&
-          (state.matchedLocation == '/onboarding' ||
-              state.matchedLocation == '/login' ||
-              state.matchedLocation == '/register')) {
-        return '/home';
-      }
+      // Tunggu jika loading
       if (authState is AuthLoadingState) {
         return null;
       }
 
+      // Redirect ke login jika belum login
+      if (!isLoggedIn && !isPublicRoute) {
+        return '/login';
+      }
+
+      // Redirect ke home jika sudah login dan coba akses auth pages
+      if (isLoggedIn &&
+          isPublicRoute &&
+          state.matchedLocation != '/onboarding') {
+        return '/home';
+      }
+
       return null;
     },
+
     routes: [
-      // ShellRoute(routes: '');
-      //--------------------------------------------------
-      // Onboarding Route
-      //--------------------------------------------------
+      // ========================================
+      // PUBLIC ROUTES
+      // ========================================
       GoRoute(
         path: '/onboarding',
         builder:
@@ -68,48 +76,96 @@ class AppRouter {
               child: OnboardingPage(),
             ),
       ),
-      //--------------------------------------------------
-      // Authentication Routes
-      //--------------------------------------------------
       GoRoute(
         path: '/login',
         builder:
-            (context, state) =>
-                BlocProvider.value(value: sl<AuthBloc>(), child: LoginPage()),
+            (context, state) => BlocProvider.value(
+              value: di.sl<AuthBloc>(),
+              child: const LoginPage(),
+            ),
       ),
       GoRoute(
         path: '/register',
         builder:
             (context, state) => BlocProvider.value(
-              value: sl<AuthBloc>(),
-              child: RegisterPage(),
+              value: di.sl<AuthBloc>(),
+              child: const RegisterPage(),
             ),
       ),
       GoRoute(
         path: '/forgot-password',
         builder:
             (context, state) => BlocProvider.value(
-              value: sl<AuthBloc>(),
-              child: ForgotPasswordPage(),
+              value: di.sl<AuthBloc>(),
+              child: const ForgotPasswordPage(),
             ),
       ),
 
-      //--------------------------------------------------
-      // ALL Routes In Home Tab
-      //--------------------------------------------------
-      GoRoute(
-        path: '/home',
-        builder:
-            (context, state) => MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (_) => di.sl<ProductBloc>()..add(LoadProducts()),
+      // ========================================
+      // AUTHENTICATED ROUTES WITH SHELL ROUTE
+      // ========================================
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) {
+          // BlocProvider hanya di-create SEKALI untuk semua tab
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => di.sl<CartBloc>()),
+              BlocProvider(
+                create: (_) => di.sl<ProductBloc>()..add(LoadProducts()),
+              ),
+            ],
+            // MainNavigationPage menerima child dari GoRouter
+            child: MainNavigation(child: child),
+          );
+        },
+        routes: [
+          //  Setiap tab punya route sendiri
+          GoRoute(
+            path: '/home',
+            pageBuilder:
+                (context, state) => NoTransitionPage(
+                  key: state.pageKey,
+                  child: const ProductPage(),
                 ),
-                BlocProvider(create: (_) => di.sl<CartBloc>()),
-              ],
-              child: MainNavigationPage(),
-            ),
+          ),
+          GoRoute(
+            path: '/trending',
+            pageBuilder:
+                (context, state) => NoTransitionPage(
+                  key: state.pageKey,
+                  child: const TrendingPage(),
+                ),
+          ),
+          GoRoute(
+            path: '/notifications',
+            pageBuilder:
+                (context, state) => NoTransitionPage(
+                  key: state.pageKey,
+                  child: const NotificationPage(),
+                ),
+          ),
+          GoRoute(
+            path: '/profile',
+            pageBuilder: (context, state) {
+              final authState = context.read<AuthBloc>().state;
+              final userId =
+                  authState is AuthenticatedState
+                      ? authState.user.uid
+                      : 'guest';
+
+              return NoTransitionPage(
+                key: state.pageKey,
+                child: ProfilePage(userId: userId),
+              );
+            },
+          ),
+        ],
       ),
+
+      // ========================================
+      // OTHER AUTHENTICATED ROUTES (without bottom nav)
+      // ========================================
       GoRoute(
         path: '/products/:productId',
         builder: (context, state) {
@@ -122,14 +178,6 @@ class AppRouter {
             child: ProductDetailPage(productId: productId),
           );
         },
-      ),
-      GoRoute(
-        path: '/search',
-        builder:
-            (context, state) => BlocProvider(
-              create: (_) => di.sl<ProductBloc>(),
-              child: SearchPage(),
-            ),
       ),
       GoRoute(
         path: '/cart',
@@ -147,34 +195,8 @@ class AppRouter {
           }
         },
       ),
-
-      //--------------------------------------------------
-      // ALL Routes in Trending Tab
-      //--------------------------------------------------
-      GoRoute(
-        path: '/trending',
-        builder:
-            (context, state) => BlocProvider(
-              create: (_) => di.sl<ProductBloc>(),
-              child: TrendingPage(),
-            ),
-      ),
-
-      //--------------------------------------------------
-      // ALL Routes in Notification Tab
-      //--------------------------------------------------
     ],
   );
-
-  static void showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
 }
 
 class GoRouterRefreshStream extends ChangeNotifier {
