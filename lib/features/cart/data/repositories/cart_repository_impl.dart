@@ -35,4 +35,9 @@ class CartRepositoryImpl implements CartRepository {
   ) async {
     await remoteDataSource.updateItemQuantity(userId, productId, newQty);
   }
+
+  @override
+  Future<String> payment(String userId, String name, String email) async {
+    return await remoteDataSource.payment(userId, name, email);
+  }
 }

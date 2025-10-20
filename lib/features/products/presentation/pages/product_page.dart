@@ -1,3 +1,5 @@
+import 'package:e_commerce_app/core/widgets/app_background.dart';
+import 'package:e_commerce_app/core/widgets/app_color_custom.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_event.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_state.dart';
@@ -40,12 +42,30 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<ProductBloc>()..add(LoadProducts()),
+
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('Products'),
+          backgroundColor: AppColorsCustom.primary,
+          title: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              String username = 'Guest';
+              if (state is AuthenticatedState) {
+                username =
+                    state.user.name.toString(); // pastikan field `name` ada
+              }
+              return Text(
+                'Welcome $username,',
+                style: const TextStyle(color: AppColorsCustom.textPrimary),
+              );
+            },
+          ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.search),
+              icon: const Icon(
+                Icons.search,
+                color: AppColorsCustom.textPrimary,
+              ),
               onPressed: () {
                 context.go('/search');
               },
@@ -64,7 +84,10 @@ class _ProductPageState extends State<ProductPage> {
                   textColor: Colors.white,
                   offset: const Offset(-7, 2),
                   child: IconButton(
-                    icon: const Icon(Icons.shopping_cart),
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      color: AppColorsCustom.textPrimary,
+                    ),
                     onPressed: () {
                       context.go('/cart');
                     },
@@ -74,47 +97,50 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ],
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            context.read<ProductBloc>().add(LoadProducts());
-            await context.read<ProductBloc>().stream.firstWhere(
-              (state) => state is! ProductLoading,
-            );
-          },
-          child: BlocBuilder<ProductBloc, ProductState>(
-            builder: (context, state) {
-              if (state is ProductLoading) {
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('Loading products...'),
-                    ],
-                  ),
-                );
-              } else if (state is ProductLoaded) {
-                if (state.products.isEmpty) {
-                  return const EmptyProduct();
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: state.products.length,
-                  itemBuilder: (context, index) {
-                    return CardProduct(product: state.products[index]);
-                  },
-                );
-              } else if (state is ProductError) {
-                return ErrorProduct(
-                  message: state.message,
-                  onRetry: () {
-                    context.read<ProductBloc>().add(LoadProducts());
-                  },
-                );
-              }
-              return const Center(child: Text('Something went wrong'));
+        body: AppBackground(
+          isScrollable: false,
+          child: RefreshIndicator(
+            onRefresh: () async {
+              context.read<ProductBloc>().add(LoadProducts());
+              await context.read<ProductBloc>().stream.firstWhere(
+                (state) => state is! ProductLoading,
+              );
             },
+            child: BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, state) {
+                if (state is ProductLoading) {
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text('Loading products...'),
+                      ],
+                    ),
+                  );
+                } else if (state is ProductLoaded) {
+                  if (state.products.isEmpty) {
+                    return const EmptyProduct();
+                  }
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: state.products.length,
+                    itemBuilder: (context, index) {
+                      return CardProduct(product: state.products[index]);
+                    },
+                  );
+                } else if (state is ProductError) {
+                  return ErrorProduct(
+                    message: state.message,
+                    onRetry: () {
+                      context.read<ProductBloc>().add(LoadProducts());
+                    },
+                  );
+                }
+                return const Center(child: Text('Something went wrong'));
+              },
+            ),
           ),
         ),
       ),

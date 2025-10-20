@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/widgets/app_background.dart';
 import 'package:e_commerce_app/features/products/domain/entities/product.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:e_commerce_app/features/products/presentation/bloc/product_event.dart';
@@ -35,6 +36,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 25, 170, 136),
         title: const Text('Product Detail'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -43,38 +45,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           },
         ),
       ),
-      body: BlocListener<ProductBloc, ProductState>(
-        listener: (context, state) {
-          //TODO FIXIT
-          // if (state is ProductCartSuccess) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(
-          //       content: Text(state.message),
-          //       backgroundColor: Colors.green,
-          //     ),
-          //   );
-          // }
-        },
-        child: BlocBuilder<ProductBloc, ProductState>(
-          builder: (context, state) {
-            if (state is ProductLoading) {
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 16),
-                    Text('Loading product details...'),
-                  ],
-                ),
-              );
-            } else if (state is ProductDetailLoaded) {
-              return _buildProductDetail(context, state.product);
-            } else if (state is ProductError) {
-              return _buildErrorState(context, state.message);
+      body: AppBackground(
+        isScrollable: false,
+        child: BlocListener<ProductBloc, ProductState>(
+          listener: (context, state) {
+            if (state is ProductError) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
-            return const Center(child: Text('No data available'));
           },
+          child: BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoading) {
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Loading product details...'),
+                    ],
+                  ),
+                );
+              } else if (state is ProductDetailLoaded) {
+                return _buildProductDetail(context, state.product);
+              } else if (state is ProductError) {
+                return _buildErrorState(context, state.message);
+              }
+              return const Center(child: Text('No data available'));
+            },
+          ),
         ),
       ),
     );
@@ -120,9 +121,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           const SizedBox(height: 16),
           Text(
             product.title,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -130,7 +132,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Text(
                 '\$${product.price.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.green,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -140,7 +142,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   const Icon(Icons.star, color: Colors.amber, size: 20),
                   Text(
                     '${product.rating}',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ],
               ),
@@ -149,16 +153,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           const SizedBox(height: 16),
           Text(
             'Description',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             product.description,
             style: Theme.of(
               context,
-            ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+            ).textTheme.bodyMedium?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 24),
           Center(

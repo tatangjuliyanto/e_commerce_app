@@ -32,6 +32,7 @@ import 'features/auth/domain/usecases/logout_user.dart';
 import 'features/cart/data/datasources/cart_remote_data_source.dart';
 import 'features/cart/data/repositories/cart_repository_impl.dart';
 import 'features/cart/domain/repositories/cart_repository.dart';
+import 'features/cart/domain/usecases/payment_use_case.dart';
 
 final sl = GetIt.instance;
 
@@ -154,6 +155,7 @@ Future<void> init() async {
       addToCart: sl<AddToCartUseCase>(),
       removeFromCart: sl<RemoveFromCartUseCase>(),
       updateItemQuantity: sl<UpdateItemQuantityUseCase>(),
+      paymentUseCase: sl<PaymentUseCase>(),
     ),
   );
 
@@ -174,6 +176,9 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<RemoveFromCartUseCase>(
     () => RemoveFromCartUseCase(sl<CartRepository>()),
+  );
+  sl.registerLazySingleton<PaymentUseCase>(
+    () => PaymentUseCase(sl<CartRepository>()),
   );
 
   // Data sources

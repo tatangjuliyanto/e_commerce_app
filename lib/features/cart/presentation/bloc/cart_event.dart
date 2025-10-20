@@ -32,3 +32,13 @@ class RemoveItemFromCart extends CartEvent {
   final int productId;
   RemoveItemFromCart(this.userId, this.productId);
 }
+
+class PaymentEvent extends CartEvent {
+  final String userId;
+  final String name;
+  final String email;
+  PaymentEvent({required this.userId, required this.name, required this.email});
+
+  @override
+  List<Object?> get props => [userId, name, email];
+}

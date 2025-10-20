@@ -1,5 +1,6 @@
 import 'package:e_commerce_app/features/cart/domain/usecases/add_to_cart_use_case.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/get_cart_use_case.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/payment_use_case.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/remove_from_cart_use_case.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/update_item_quantity_use_case.dart';
 import 'package:e_commerce_app/features/cart/presentation/bloc/cart_event.dart';
@@ -11,17 +12,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final AddToCartUseCase addToCart;
   final UpdateItemQuantityUseCase updateItemQuantity;
   final RemoveFromCartUseCase removeFromCart;
+  final PaymentUseCase paymentUseCase;
 
   CartBloc({
     required this.getCart,
     required this.addToCart,
     required this.updateItemQuantity,
     required this.removeFromCart,
+    required this.paymentUseCase,
   }) : super(CartInitial()) {
     on<LoadCart>(_onLoadCart);
     on<AddItemToCartEvent>(_onAddItemToCart);
     on<UpdateItemQuantity>(_onUpdateItemQuantity);
     on<RemoveItemFromCart>(_onRemoveItemFromCart);
+    on<PaymentEvent>(_onPayment);
   }
   Future<void> _onLoadCart(LoadCart event, Emitter<CartState> emit) async {
     emit(CartLoading());
@@ -68,6 +72,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoaded(cartEntity: updatedCart));
     } catch (e) {
       emit(CartError(e.toString()));
+    }
+  }
+
+  Future<void> _onPayment(PaymentEvent event, Emitter<CartState> emit) async {
+    try {
+      // Remove this line: await paymentUseCase(event.userId, event.name, event.email);
+      final getSnapToken = await paymentUseCase(
+        event.userId,
+        event.name,
+        event.email,
+      );
+      emit(PaymentSuccessState(snapToken: getSnapToken));
+    } catch (e) {
+      emit(PaymentFailure(e.toString()));
     }
   }
 }

@@ -65,6 +65,7 @@ class MainNavigation extends StatelessWidget {
           // final cartItemCount = cartState.cartEntity.items.length;
         }
         return BottomNavigationBar(
+          backgroundColor: Colors.tealAccent.withOpacity(0.4),
           items: <BottomNavigationBarItem>[
             const BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -84,8 +85,8 @@ class MainNavigation extends StatelessWidget {
             ),
           ],
           currentIndex: selectedIndex,
-          selectedItemColor: Colors.purple,
-          unselectedItemColor: Colors.black54,
+          selectedItemColor: const Color.fromARGB(255, 176, 73, 194),
+          unselectedItemColor: Colors.black,
           type: BottomNavigationBarType.fixed,
           onTap: (index) => _onItemTapped(context, index),
         );

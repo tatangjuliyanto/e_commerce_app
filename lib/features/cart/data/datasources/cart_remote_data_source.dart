@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:e_commerce_app/features/cart/data/models/cart_item_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,6 +8,7 @@ abstract class CartRemoteDataSource {
   Future<void> addToCart(String userId, CartItemModel item);
   Future<void> removeFromCart(String userId, int productId);
   Future<void> updateItemQuantity(String userId, int productId, int newQty);
+  Future<String> payment(String userId, String name, String email);
 }
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
@@ -89,5 +89,24 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         })
         .eq('user_id', userId)
         .eq('product_id', productId);
+  }
+
+  @override
+  Future<String> payment(String userId, String name, String email) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:5001/checkout'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'user_id': userId,
+        'customer_name': name,
+        'customer_email': email,
+      }),
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['snapToken'];
+    } else {
+      throw Exception('Checkout failed');
+    }
   }
 }

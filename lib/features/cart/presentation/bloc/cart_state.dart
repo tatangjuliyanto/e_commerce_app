@@ -30,3 +30,22 @@ class CartError extends CartState {
   final String message;
   CartError(this.message);
 }
+
+//payment states
+class PaymentSuccessState extends CartState {
+  final String snapToken;
+
+  PaymentSuccessState({required this.snapToken});
+
+  @override
+  List<Object> get props => [snapToken];
+}
+
+class PaymentFailure extends CartState {
+  final String error;
+
+  PaymentFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
