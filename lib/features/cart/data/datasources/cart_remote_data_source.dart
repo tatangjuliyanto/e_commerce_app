@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:e_commerce_app/core/config/api_config.dart';
 import 'package:e_commerce_app/features/cart/data/models/cart_item_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -13,7 +14,8 @@ abstract class CartRemoteDataSource {
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   final SupabaseClient supabase;
-  CartRemoteDataSourceImpl(this.supabase);
+  final http.Client client;
+  CartRemoteDataSourceImpl(this.supabase, this.client);
 
   @override
   Future<List<CartItemModel>> getCartItems(String userId) async {
@@ -24,11 +26,10 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
     }
     final items = <CartItemModel>[];
     for (final row in response) {
-      final productResponse = await http.get(
-        Uri.parse("https://dummyjson.com/products/${row['product_id']}"),
+      final productResponse = await client.get(
+        Uri.parse('${ApiConfig.productApiUrl}/${row['product_id']}'),
       );
       final productData = jsonDecode(productResponse.body);
-
       items.add(CartItemModel.fromJson(row, productData));
     }
 

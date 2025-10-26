@@ -67,6 +67,26 @@ class ProfilePage extends StatelessWidget {
                         children: [
                           ListTile(
                             leading: const Icon(
+                              Icons.book_online_rounded,
+                              color: AppColorsCustom.textPrimary,
+                            ),
+                            title: const Text(
+                              'My Orders',
+                              style: TextStyle(
+                                color: AppColorsCustom.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            trailing: const Icon(
+                              color: AppColorsCustom.textPrimary,
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                            ),
+                            onTap: () {},
+                          ),
+                          const Divider(),
+                          ListTile(
+                            leading: const Icon(
                               Icons.settings,
                               color: AppColorsCustom.textPrimary,
                             ),

@@ -49,3 +49,13 @@ class PaymentFailure extends CartState {
   @override
   List<Object> get props => [error];
 }
+
+class TransactionSuccess extends CartState {
+  final String message;
+  TransactionSuccess(this.message);
+}
+
+class TransactionFailure extends CartState {
+  final String error;
+  TransactionFailure(this.error);
+}

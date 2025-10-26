@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:e_commerce_app/core/config/api_config.dart';
 import 'package:e_commerce_app/features/products/data/models/product_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,17 +10,14 @@ abstract class ProductRemoteDataSource {
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final http.Client client;
-
-  static const _baseUrl = 'https://dummyjson.com/products';
-  static const _timeoutDuration = Duration(seconds: 5);
-
+  static const _timeoutDuration = Duration(seconds: 2);
   ProductRemoteDataSourceImpl(this.client);
 
   @override
   Future<List<ProductModel>> getProducts() async {
     try {
       final response = await client
-          .get(Uri.parse(_baseUrl))
+          .get(Uri.parse(ApiConfig.productApiUrl))
           .timeout(_timeoutDuration);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -40,7 +38,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     }
     try {
       final response = await client
-          .get(Uri.parse('$_baseUrl/$productId'))
+          .get(Uri.parse('${ApiConfig.productApiUrl}/$productId'))
           .timeout(_timeoutDuration);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

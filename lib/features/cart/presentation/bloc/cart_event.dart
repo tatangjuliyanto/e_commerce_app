@@ -42,3 +42,17 @@ class PaymentEvent extends CartEvent {
   @override
   List<Object?> get props => [userId, name, email];
 }
+
+class CreateTransactionEvent extends CartEvent {
+  final String userId;
+  final double totalAmount;
+  final String orderId;
+  final String status;
+
+  CreateTransactionEvent({
+    required this.userId,
+    required this.totalAmount,
+    required this.orderId,
+    required this.status,
+  });
+}

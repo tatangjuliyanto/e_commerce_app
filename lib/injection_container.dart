@@ -50,7 +50,7 @@ Future<void> init() async {
   //approuter
   sl.registerLazySingleton<AppRouter>(() => AppRouter());
 
-  //Firebase
+  //Firebase and REGISTER CLIENT
   // sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => http.Client());
 
@@ -183,6 +183,6 @@ Future<void> init() async {
 
   // Data sources
   sl.registerLazySingleton<CartRemoteDataSource>(
-    () => CartRemoteDataSourceImpl(sl()),
+    () => CartRemoteDataSourceImpl(sl(), sl()),
   );
 }
