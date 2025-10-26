@@ -6,7 +6,7 @@ import 'package:e_commerce_app/features/products/presentation/bloc/product_state
 import 'package:e_commerce_app/features/products/presentation/widgets/card_product.dart';
 import 'package:e_commerce_app/features/products/presentation/widgets/empty_product.dart';
 import 'package:e_commerce_app/features/products/presentation/widgets/error_product.dart';
-import 'package:e_commerce_app/injection_container.dart';
+import 'package:e_commerce_app/depedency_injection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';

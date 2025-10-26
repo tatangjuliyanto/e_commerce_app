@@ -2,7 +2,7 @@ import 'package:e_commerce_app/core/widgets/app_background.dart';
 import 'package:e_commerce_app/core/widgets/app_color_custom.dart';
 import 'package:e_commerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:e_commerce_app/injection_container.dart';
+import 'package:e_commerce_app/depedency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';

@@ -1,5 +1,5 @@
 import 'package:e_commerce_app/app_router.dart';
-import 'package:e_commerce_app/injection_container.dart' as di;
+import 'package:e_commerce_app/depedency_injection.dart' as di;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
